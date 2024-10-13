@@ -3,18 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class MouseController : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndDragHandler, IDragHandler, IDropHandler
+public abstract class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    private Canvas canvas;
+    public ItemData itemData;        // Tham chiếu đến Scriptable Object chứa dữ liệu
+
     private RectTransform rectTransform;
+    private Canvas canvas;
     private CanvasGroup canvasGroup;
 
-    public Vector2 originalPosition; // Vị trí ban đầu của item
+    public Vector2 originalPosition;
 
     void Awake() {
         rectTransform = GetComponent<RectTransform>();
         canvas = GetComponentInParent<Canvas>();
-        canvasGroup = GetComponent<CanvasGroup>();    
+        canvasGroup = GetComponent<CanvasGroup>();   
+        originalPosition = rectTransform.anchoredPosition;
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -44,15 +47,8 @@ public class MouseController : MonoBehaviour, IPointerDownHandler, IBeginDragHan
         }
     }
 
-    public void OnPointerDown(PointerEventData eventData)
+    public SlotType GetSlotType()
     {
-        Debug.Log("OnPointerDown");
+        return itemData.slotType; // Trả về loại slot của món
     }
-
-    public void OnDrop(PointerEventData eventData)
-    {
-        Debug.Log("OnDrop12121");
-    }
-
-    
 }

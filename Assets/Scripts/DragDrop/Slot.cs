@@ -6,15 +6,24 @@ using UnityEngine.EventSystems;
 public class Slot : MonoBehaviour, IDropHandler
 {
     public SlotType slotType; // Kiểu slot: Đồ ăn hoặc Đồ uống
-    private PointerEventData temp = null;
+
     public void OnDrop(PointerEventData eventData)
     {
-        Debug.Log("OnDrop");
-        if(eventData.pointerDrag != null)
+        if (eventData.pointerDrag != null)
         {
-            eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = 
-                GetComponent<RectTransform>().anchoredPosition;
-            eventData.pointerDrag.GetComponent<MouseController>().originalPosition = GetComponent<RectTransform>().anchoredPosition;
+            // Kiểm tra xem đối tượng có triển khai IDraggableItem không
+            var draggableItem = eventData.pointerDrag.GetComponent<DraggableItem>();
+
+            if (draggableItem != null && draggableItem.GetSlotType() == slotType)
+            {
+                // Di chuyển đối tượng vào vị trí của slot
+                RectTransform itemTransform = eventData.pointerDrag.GetComponent<RectTransform>();
+                itemTransform.anchoredPosition = GetComponent<RectTransform>().anchoredPosition;
+
+                // Cập nhật vị trí ban đầu cho đối tượng
+                eventData.pointerDrag.GetComponent<DraggableItem>().originalPosition = 
+                    GetComponent<RectTransform>().anchoredPosition;
+            }
         }
     }
 }
