@@ -5,46 +5,103 @@ using UnityEngine.EventSystems;
 
 public abstract class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    public ItemData itemData;        // Tham chiếu đến Scriptable Object chứa dữ liệu
-
-    private RectTransform rectTransform;
-    private Canvas canvas;
-    private CanvasGroup canvasGroup;
+    // Tham chiếu đến Scriptable Object chứa dữ liệu
+    public ItemData itemData;
+    [HideInInspector]
+    public RectTransform rectTransform;
+    [HideInInspector]
+    public Canvas canvas;
+    [HideInInspector]
+    public CanvasGroup canvasGroup;
+    [HideInInspector]
+    public GameObject clone;
 
     public Vector2 originalPosition;
 
-    void Awake() {
+    public virtual void Awake() {
+        canvas = GetComponentInParent<Canvas>();  
+        canvasGroup = GetComponent<CanvasGroup>();
         rectTransform = GetComponent<RectTransform>();
-        canvas = GetComponentInParent<Canvas>();
-        canvasGroup = GetComponent<CanvasGroup>();   
-        originalPosition = rectTransform.anchoredPosition;
     }
 
-    public void OnBeginDrag(PointerEventData eventData)
+    public virtual void OnBeginDrag(PointerEventData eventData)
     {
         Debug.Log("OnBeginDrag");
-        originalPosition = rectTransform.anchoredPosition; // Lưu vị trí ban đầu
-        canvasGroup.blocksRaycasts = false;
+        //originalPosition = rectTransform.anchoredPosition; // Lưu vị trí ban đầu
+        
+        clone = Instantiate(gameObject, canvas.transform);
+        rectTransform = clone.GetComponent<RectTransform>();
+        clone.GetComponent<CanvasGroup>().blocksRaycasts = false;
+
+        
     }
 
-    public void OnDrag(PointerEventData eventData)
+    public virtual void OnDrag(PointerEventData eventData)
     {
         Debug.Log("OnDrag");
-        canvasGroup.alpha = 0.6f;
-        rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
+        if(clone != null)
+        {
+            clone.GetComponent<CanvasGroup>().alpha = 0.6f;
+            rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
+        }
+        
     }
 
-    public void OnEndDrag(PointerEventData eventData)
+    public virtual void OnEndDrag(PointerEventData eventData)
     {
         Debug.Log("OnEndDrag");
-        canvasGroup.alpha = 1f;
-        canvasGroup.blocksRaycasts = true;
+        clone.GetComponent<CanvasGroup>().alpha = 1f;
 
-        if (eventData.pointerDrag != null && 
-                rectTransform.anchoredPosition != originalPosition)
+        if(clone != null && !IsDroppedOnValidSlot())
         {
-            rectTransform.anchoredPosition = originalPosition; // Khôi phục vị trí
+            Destroy(clone.gameObject);
+        }else if(IsDroppedOnValidSlot())
+        {
+            //'canvasGroup.blocksRaycasts = true;
         }
+        
+
+        // if (eventData.pointerDrag != null && 
+        //         rectTransform.anchoredPosition != originalPosition)
+        // {
+        //     if(transform.parent == canvas.transform)
+        //     {
+        //         transform.SetParent(GameObject.Find(this.itemData.slotType.ToString()).transform);
+        //         rectTransform.anchoredPosition = originalPosition;
+        //     }
+                
+            
+        //      // Khôi phục vị trí
+        // }
+    }
+
+    private bool IsDroppedOnValidSlot()
+    {
+        // Sử dụng raycast để kiểm tra đối tượng UI mà con trỏ chuột đang nằm trên
+        PointerEventData pointerEventData = new PointerEventData(EventSystem.current)
+        {
+            position = Input.mousePosition // Lấy vị trí hiện tại của con trỏ chuột
+        };
+
+        // Tạo danh sách chứa các đối tượng mà raycast chạm vào
+        List<RaycastResult> raycastResults = new List<RaycastResult>();
+
+        // Thực hiện raycast từ vị trí chuột
+        EventSystem.current.RaycastAll(pointerEventData, raycastResults);
+
+        // Kiểm tra xem có đối tượng nào là Slot không
+        foreach (RaycastResult result in raycastResults)
+        {
+            Food food = result.gameObject.GetComponent<Food>();
+            if (food != null)
+            {
+                // Nếu đúng là Slot, trả về true
+                return true;
+            }
+        }
+
+        // Nếu không tìm thấy slot, trả về false
+        return false;
     }
 
     public SlotType GetSlotType()
