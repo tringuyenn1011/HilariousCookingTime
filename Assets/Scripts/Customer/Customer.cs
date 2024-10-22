@@ -54,7 +54,7 @@ public class Customer : MonoBehaviour
     }
 
     // Khách hàng sẽ ngồi nếu ghế trống và nếu không có ghế trống 
-    Transform ChooseSlot()
+    private Transform ChooseSlot()
     {
         foreach (ClientSlot s in clientSlots)
         {

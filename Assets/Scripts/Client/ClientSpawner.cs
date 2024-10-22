@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class ClientSpawner : MonoBehaviour
+public class ClientSpawner2 : MonoBehaviour
 {
     public ScriptableObjectCustomers customers;
     private int customerQuantities = 0;
-    public Transform spawnPoint;
-    public Transform endPoint;
+    public RectTransform spawnPoint;
+    public RectTransform endPoint;
     public ClientSlot[] slotPoints;
     public float spawnInterval = 2f;
     private float timer;
