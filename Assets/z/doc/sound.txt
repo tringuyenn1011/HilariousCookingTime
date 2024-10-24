@@ -1,0 +1,32 @@
+Âm thanh gồm:
+
+-Menu:
++Nhấn nút, hover nút
++không bấm được nút
++Nhạc nền menu
+
+-Làm đồ ăn:
++Lấy tô dĩa ly
++Lấy nguyên liệu, thả nguyên liệu xuống
++Tiếng nước sôi rót vào
++Kết hợp đồ ăn để tạo thành món ăn
++Thả đồ ăn vào thùng rác
++Thả đồ ăn vào ná
+
+-Làm kem:
++Tiếng xịt kem từ vòi
+
+-Ná:
++tiếng bắn đồ ăn
++Kéo ná
++Nhấn nút
++Đưa ná lên từ từ
++đồ ăn rớt hụt
+
+-Khách hàng:
++vui
++giận
++ném đồ ăn vào màn hình
++bỏ đi
+
+-Tiếng thua game:

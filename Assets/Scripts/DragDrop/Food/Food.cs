@@ -39,13 +39,21 @@ public class Food : DraggableItem, IDropHandler
         if (eventData.pointerDrag != null)
         {
             var draggableItem = eventData.pointerDrag.GetComponent<DraggableItem>();
-            if (draggableItem != null && CheckCanDropInto(draggableItem) && !IsHaveBefore(draggableItem))
+            
+            if(itemsInSlot.Count == 0 && draggableItem.GetSlotType() == SlotType.Kitchenware)
             {
+                Debug.Log(1);
+                    AddIngredient(draggableItem);
+            }else if (draggableItem != null && CheckCanDropInto(draggableItem) && !IsHaveBefore(draggableItem)
+                        && itemsInSlot.Count != 0)
+            {
+                Debug.Log(2);
                 AddIngredient(draggableItem);
                 if(itemsInSlot.Count >= 2)
                     CreateFoodItem();
             }else
             {
+                Debug.Log(3);
                 Destroy(draggableItem.clone.gameObject);
             }
         }   
@@ -83,7 +91,7 @@ public class Food : DraggableItem, IDropHandler
 
     private void CreateFoodItem()
     {
-        foreach(var recipe in GameData.Menu.recipes)
+        foreach(var recipe in GameRecipe.Menu.recipes)
         {
             if(DoesRecipeMatch(itemsInSlot, recipe))
             {
@@ -150,12 +158,22 @@ public class Food : DraggableItem, IDropHandler
     private bool IsSpiceFirstIngredient(DraggableItem draggableItem)
     {
         // Kiểm tra xem có nguyên liệu trong slot trước khi cho phép thêm gia vị
-        if (IsSpice(draggableItem) && itemsInSlot.Count == 0)
+        if (IsSpice(draggableItem) && itemsInSlot.Count == 1)
         {
             Debug.Log("Không thể thêm gia vị khi không có nguyên liệu nào!");
             Destroy(draggableItem.clone.gameObject);
             return true;
         }
+        return false;
+    }
+
+    private bool IsFirstKitchenware(DraggableItem draggableItem)
+    {
+        if(itemsInSlot.Count == 0 || itemsInSlot[0].slotType == SlotType.Kitchenware)
+        {
+            return true;
+        }
+        
         return false;
     }
     

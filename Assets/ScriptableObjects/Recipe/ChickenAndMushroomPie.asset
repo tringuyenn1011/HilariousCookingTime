@@ -15,6 +15,7 @@ MonoBehaviour:
   foodName: ChickenAndMushroomPie
   foodSO: {fileID: 11400000, guid: 7fd9610077f974a458cec081c88b6202, type: 2}
   ingredient:
+  - {fileID: 11400000, guid: a16be106364ca854383983b4ec5af933, type: 2}
   - {fileID: 11400000, guid: fa2b30a9c0b40384ab28dc6be02b4c5f, type: 2}
   - {fileID: 11400000, guid: 86bf188859bd64f45bf37afeb99e4284, type: 2}
   - {fileID: 11400000, guid: d29690cd6c213fc48b5807476e1eee2e, type: 2}
