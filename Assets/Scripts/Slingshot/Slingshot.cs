@@ -4,39 +4,40 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI; 
 
-public class Slingshot : MonoBehaviour, IPointerDownHandler, IPointerUpHandler 
+public class Slingshot : MonoBehaviour
 {
     public LineRenderer[] lineRenderers;
-    public RectTransform[] stripPositions;
-    public RectTransform center;
-    public RectTransform idlePosition;
+    public Transform[] stripPositions;
+    public Transform center;
+    public Transform idlePosition;
 
-    public Vector3 currentPosition;
+    private Vector3 currentPosition;
 
     public float maxLength;
 
     public float bottomBoundary;
+    public float topBoundary;
 
     bool isMouseDown;
 
-    public float dishPositionOffset;
+    // public float dishPositionOffset;
 
-    public ItemData itemData;
-    Rigidbody2D dish;
-    Collider2D dishCollider;
+    // public ItemData itemData;
+    // Rigidbody2D dish;
+    // Collider2D dishCollider;
 
-    public float force;
-    GameObject clone;
-    public RectTransform canvasRectTransform;
+    // public float force;
+    // GameObject clone;
+    // public RectTransform canvasRectTransform;
 
     void Start()
     {
         lineRenderers[0].positionCount = 2;
         lineRenderers[1].positionCount = 2;
-        lineRenderers[0].SetPosition(0, stripPositions[0].anchoredPosition);
-        lineRenderers[1].SetPosition(0, stripPositions[1].anchoredPosition);
+        lineRenderers[0].SetPosition(0, stripPositions[0].position);
+        lineRenderers[1].SetPosition(0, stripPositions[1].position);
 
-        CreateDish();
+        //CreateDish();
     }
 
     /// <summary>
@@ -50,20 +51,20 @@ public class Slingshot : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     /// <summary>
     /// Tạo một đối tượng gameObject lấy data từ item data
     /// </summary>
-    void CreateDish()
-    {
-        clone = Instantiate(Resources.Load<GameObject>("Prefabs/EmptyProjectile"), this.transform);
-        clone.name = itemData.name;
-        clone.GetComponent<Image>().sprite = itemData.icon;
+    // void CreateDish()
+    // {
+    //     clone = Instantiate(Resources.Load<GameObject>("Prefabs/EmptyProjectile"), this.transform);
+    //     clone.name = itemData.name;
+    //     clone.GetComponent<Image>().sprite = itemData.icon;
 
-        dish = clone.GetComponent<Rigidbody2D>();
-        dishCollider = clone.GetComponent<Collider2D>();
-        dishCollider.enabled = false;
+    //     dish = clone.GetComponent<Rigidbody2D>();
+    //     dishCollider = clone.GetComponent<Collider2D>();
+    //     dishCollider.enabled = false;
 
-        dish.isKinematic = true;
+    //     dish.isKinematic = true;
 
-        ResetStrips();
-    }
+    //     ResetStrips();
+    // }
 
     void Update()
     {
@@ -72,18 +73,20 @@ public class Slingshot : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             // Lấy position của con trỏ và chuyển nó thành position trên canvas
             Vector3 mousePosition = Input.mousePosition;
             mousePosition.z = 10;
-            Vector2 canvasPosition;
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRectTransform, mousePosition, null, out canvasPosition);
-            currentPosition = canvasPosition;
+            currentPosition = Camera.main.ScreenToWorldPoint(mousePosition);
 
-            // Tính giá trị vector từ vị trí center đến vị trí con trỏ trên canvas
-            currentPosition = center.anchoredPosition3D + Vector3.ClampMagnitude(currentPosition - center.anchoredPosition3D, maxLength);
+            // Vector2 canvasPosition;
+            // RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRectTransform, mousePosition, null, out canvasPosition);
+            // currentPosition = canvasPosition;
+
+            // // Tính giá trị vector từ vị trí center đến vị trí con trỏ trên canvas
+            currentPosition = center.position + Vector3.ClampMagnitude(currentPosition - center.position, maxLength);
             currentPosition = ClampBoundary(currentPosition);
             SetStrips(currentPosition);
-            if (dishCollider)
-            {
-                dishCollider.enabled = true;
-            }
+            // if (dishCollider)
+            // {
+            //     dishCollider.enabled = true;
+            // }
         }
         else
         {
@@ -91,36 +94,36 @@ public class Slingshot : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         }
     }
 
-    public void OnPointerDown(PointerEventData eventData) 
+    public void OnMouseDown() 
     {
         isMouseDown = true;
     }
 
-    public void OnPointerUp(PointerEventData eventData) 
-    {
+    private void OnMouseUp() {
         isMouseDown = false;
-        Shoot();
+        //Shoot();
     }
 
     /// <summary>
     /// Cho projectile 1 lực force với hướng ngược lại của vector từ center đến con trỏ
     /// </summary>
-    void Shoot()
-    {
-        dish.isKinematic = false;
-        Vector3 dishForce = (currentPosition - center.anchoredPosition3D) * force * -1;
-        dish.velocity = dishForce;
+    // void Shoot()
+    // {
+    //     dish.isKinematic = false;
+    //     Vector3 dishForce = (currentPosition - center.anchoredPosition3D) * force * -1;
+    //     dish.velocity = dishForce;
 
-        dish = null;
-        dishCollider = null;
-        //Loại bỏ dòng này nếu như đã làm chức năng setItemData
-        Invoke("CreateDish", 2);
-    }
+    //     dish = null;
+    //     dishCollider = null;
+    //     //Loại bỏ dòng này nếu như đã làm chức năng setItemData
+    //     Invoke("CreateDish", 2);
+    // }
 
     void ResetStrips()
     {
-        currentPosition = idlePosition.anchoredPosition;
+        currentPosition = idlePosition.position;
         SetStrips(currentPosition);
+        //SetStrips(idlePosition.position);
     }
 
     void SetStrips(Vector3 position)
@@ -128,11 +131,11 @@ public class Slingshot : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         lineRenderers[0].SetPosition(1, position);
         lineRenderers[1].SetPosition(1, position);
 
-        if (dish)
-        {
-            Vector3 dir = position - center.anchoredPosition3D;
-            clone.GetComponent<RectTransform>().anchoredPosition = position + dir.normalized * dishPositionOffset;
-        }
+        // if (dish)
+        // {
+        //     Vector3 dir = position - center.anchoredPosition3D;
+        //     clone.GetComponent<RectTransform>().anchoredPosition = position + dir.normalized * dishPositionOffset;
+        // }
     }
 
     /// <summary>
@@ -142,7 +145,7 @@ public class Slingshot : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     /// <returns></returns>
     Vector3 ClampBoundary(Vector3 vector)
     {
-        vector.y = Mathf.Clamp(vector.y, bottomBoundary, 10);
+        vector.y = Mathf.Clamp(vector.y, bottomBoundary, topBoundary);  // Giới hạn bình thường
         return vector;
     }
 }
