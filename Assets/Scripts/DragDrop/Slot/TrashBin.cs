@@ -7,6 +7,7 @@ public class TrashBin : MonoBehaviour, IDropHandler
 {
     public void OnDrop(PointerEventData eventData)
     {
+        Debug.Log("trásh");
         
         if(eventData.pointerDrag.gameObject.GetComponent<Food>().slotType == SlotType.Food)
         {

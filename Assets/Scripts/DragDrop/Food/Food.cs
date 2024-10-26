@@ -13,6 +13,8 @@ public class Food : DraggableItem, IDropHandler
     public SlotType slotType;
     private Transform parentTransform;
 
+
+
     public override void Awake() 
     {
         base.Awake();
@@ -179,10 +181,11 @@ public class Food : DraggableItem, IDropHandler
     
     public override void OnEndDrag(PointerEventData eventData)
     {
-        transform.SetParent(parentTransform);
+            transform.SetParent(parentTransform);
+
+            canvasGroup.blocksRaycasts = true;
+            rectTransform.anchoredPosition = originalPosition;
         
-        canvasGroup.blocksRaycasts = true;
-        rectTransform.anchoredPosition = originalPosition;
     }
 
 

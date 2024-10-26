@@ -38,6 +38,8 @@ public class Slingshot : MonoBehaviour
     // GameObject clone;
     // public RectTransform canvasRectTransform;
 
+    public GameObject slingSlot;
+
     void Start()
     {
         lineRenderers[0].positionCount = 2;
@@ -45,9 +47,8 @@ public class Slingshot : MonoBehaviour
         lineRenderers[0].SetPosition(0, stripPositions[0].position);
         lineRenderers[1].SetPosition(0, stripPositions[1].position);
 
-        food = this.transform.Find("object").gameObject;
+        ResetStrips();
 
-        SetFood();
     }
 
     /// <summary>
@@ -61,8 +62,9 @@ public class Slingshot : MonoBehaviour
     /// <summary>
     /// Tạo một đối tượng gameObject lấy data từ item data
     /// </summary>
-    void SetFood()
+    public void SetFood()
     {
+        food = this.transform.Find("object").gameObject;
         SpriteRenderer foodRd = food.GetComponent<SpriteRenderer>();
         food.name = itemData.name;
         foodRd.sprite = itemData.icon;
@@ -82,11 +84,13 @@ public class Slingshot : MonoBehaviour
     {
         if(itemData != null && itemData.slotType == SlotType.Food)
         {
+            
             if (isMouseDown)
             {
+                
                 // Lấy position của con trỏ và chuyển nó thành position trên canvas
                 Vector3 mousePosition = Input.mousePosition;
-                mousePosition.z = 10;
+                mousePosition.z = 100;
                 currentPosition = Camera.main.ScreenToWorldPoint(mousePosition);
 
                 // Vector2 canvasPosition;
@@ -122,15 +126,16 @@ public class Slingshot : MonoBehaviour
             foodPrefab = Instantiate(Resources.Load<GameObject>("Prefabs/EmptyProjectile"), currentPosition, Quaternion.identity,this.transform);
             foodPrefab.name = itemData.name;
             foodPrefab.GetComponent<SpriteRenderer>().sprite = itemData.icon;
+
             
             
             //GameObject clone = Instantiate(foodPrefab, this.transform);
             //Destroy(foodPrefab);
             //Shoot();
-            isMouseDown = false;
+            
             SetObjectToOriginal();
         }
-        
+        isMouseDown = false;
     }
 
     /// <summary>
@@ -187,6 +192,8 @@ public class Slingshot : MonoBehaviour
         Color color = foodRd.color;
         color.a = 0;
         foodRd.color = color;
+
+        slingSlot.SetActive(true);
     }
 
     /// <summary>
@@ -199,4 +206,5 @@ public class Slingshot : MonoBehaviour
         vector.y = Mathf.Clamp(vector.y, bottomBoundary, topBoundary);  // Giới hạn bình thường
         return vector;
     }
+
 }

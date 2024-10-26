@@ -26,7 +26,6 @@ public abstract class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHan
 
     public virtual void OnBeginDrag(PointerEventData eventData)
     {
-        Debug.Log("OnBeginDrag");
         //originalPosition = rectTransform.anchoredPosition; // Lưu vị trí ban đầu
         
         clone = Instantiate(gameObject, canvas.transform);
@@ -38,7 +37,6 @@ public abstract class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHan
 
     public virtual void OnDrag(PointerEventData eventData)
     {
-        Debug.Log("OnDrag");
         if(clone != null)
         {
             clone.GetComponent<CanvasGroup>().alpha = 0.6f;
@@ -49,7 +47,6 @@ public abstract class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHan
 
     public virtual void OnEndDrag(PointerEventData eventData)
     {
-        Debug.Log("OnEndDrag");
         clone.GetComponent<CanvasGroup>().alpha = 1f;
 
         if(clone != null && !IsDroppedOnValidSlot())
