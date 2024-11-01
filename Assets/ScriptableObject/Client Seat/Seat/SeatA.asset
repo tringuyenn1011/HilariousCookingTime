@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: SeatA
   m_EditorClassIdentifier: 
   seatName: A
-  isUsing: 1
-  seatPosition: {x: -2375, y: 0}
+  isUsing: 0
+  seatPosition: {x: -2350, y: 290}

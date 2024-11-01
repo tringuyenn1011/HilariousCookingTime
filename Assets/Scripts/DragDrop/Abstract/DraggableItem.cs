@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public abstract class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
@@ -15,21 +16,33 @@ public abstract class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHan
     public CanvasGroup canvasGroup;
     [HideInInspector]
     public GameObject clone;
-
+    [HideInInspector]
     public Vector2 originalPosition;
+
+    private UpDownCamera dragDrop;
 
     public virtual void Awake() {
         canvas = GetComponentInParent<Canvas>();  
         canvasGroup = GetComponent<CanvasGroup>();
         rectTransform = GetComponent<RectTransform>();
+        dragDrop = GameObject.Find("DragDrop").GetComponent<UpDownCamera>();
+        originalPosition = rectTransform.anchoredPosition; // Lưu vị trí ban đầu
     }
 
     public virtual void OnBeginDrag(PointerEventData eventData)
     {
-        //originalPosition = rectTransform.anchoredPosition; // Lưu vị trí ban đầu
+        //
         
         clone = Instantiate(gameObject, canvas.transform);
         rectTransform = clone.GetComponent<RectTransform>();
+
+        if(dragDrop.isCamMove)
+        {
+            rectTransform.anchoredPosition += new Vector2(0,285);
+        }
+
+        
+        clone.GetComponent<Image>().sprite = itemData.icon;
         clone.GetComponent<CanvasGroup>().blocksRaycasts = false;
 
         
@@ -39,7 +52,11 @@ public abstract class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHan
     {
         if(clone != null)
         {
-            clone.GetComponent<CanvasGroup>().alpha = 0.6f;
+            Color color = clone.GetComponent<Image>().color;
+            color.a = 255;
+            clone.GetComponent<Image>().color = color;
+
+            clone.GetComponent<CanvasGroup>().alpha = 0.9f;
             rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
         }
         

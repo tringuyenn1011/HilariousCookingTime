@@ -6,4 +6,7 @@ using UnityEngine;
 public class Menu : ScriptableObject
 {
     public List<Recipe> recipes; // Danh sách các công thức nấu ăn
+    public List<Recipe> recipesInMenu; // Danh sách các công thức nấu ăn có trong Menu
+
+
 }

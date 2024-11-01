@@ -13,6 +13,17 @@ public class Food : DraggableItem, IDropHandler
     public SlotType slotType;
     private Transform parentTransform;
 
+    private bool isTo = true;
+
+    private Dictionary<string, List<SlotType>> foodOrders = new Dictionary<string, List<SlotType>>()
+    {
+        { "Tô", new List<SlotType> { SlotType.Kitchenware, SlotType.Ingredient, SlotType.Water, SlotType.Meat, SlotType.Spice } },
+        { "Dĩa", new List<SlotType> { SlotType.Kitchenware, SlotType.Ingredient, SlotType.Spice, SlotType.Spice } }
+    };
+
+    private List<SlotType> toList = new List<SlotType> { SlotType.Kitchenware, SlotType.Ingredient, SlotType.Water, SlotType.Meat, SlotType.Spice };
+    private List<SlotType> diaList = new List<SlotType> { SlotType.Kitchenware, SlotType.Kimchi, SlotType.Spice, SlotType.Spice};
+
 
 
     public override void Awake() 
@@ -37,27 +48,32 @@ public class Food : DraggableItem, IDropHandler
 
     public void OnDrop(PointerEventData eventData)
     {
-        Debug.Log("Oke?");
         if (eventData.pointerDrag != null)
         {
             var draggableItem = eventData.pointerDrag.GetComponent<DraggableItem>();
-            
-            if(itemsInSlot.Count == 0 && draggableItem.GetSlotType() == SlotType.Kitchenware)
+            if(eventData.pointerDrag.GetComponent<Food>() == null)
             {
-                Debug.Log(1);
-                    AddIngredient(draggableItem);
-            }else if (draggableItem != null && CheckCanDropInto(draggableItem) && !IsHaveBefore(draggableItem)
-                        && itemsInSlot.Count != 0)
-            {
-                Debug.Log(2);
-                AddIngredient(draggableItem);
-                if(itemsInSlot.Count >= 2)
-                    CreateFoodItem();
-            }else
-            {
-                Debug.Log(3);
-                Destroy(draggableItem.clone.gameObject);
+                DropTo(draggableItem);
             }
+            else
+            {
+                
+            }
+            
+            
+            // if(itemsInSlot.Count == 0 && draggableItem.GetSlotType() == SlotType.Kitchenware)
+            // {
+            //         AddIngredient(draggableItem);
+            // }else if (draggableItem != null && CheckCanDropInto(draggableItem) && !IsHaveBefore(draggableItem)
+            //             && itemsInSlot.Count != 0)
+            // {
+            //     AddIngredient(draggableItem);
+            //     if(itemsInSlot.Count >= 2)
+            //         CreateFoodItem();
+            // }else
+            // {
+            //     Destroy(draggableItem.clone.gameObject);
+            // }
         }   
 
 
@@ -78,9 +94,9 @@ public class Food : DraggableItem, IDropHandler
     
     private bool IsHaveBefore(DraggableItem draggableItem)
     {
-        foreach(Transform child in this.transform)
+        foreach(ItemData item in itemsInSlot)
         {
-            if(draggableItem.itemData == child.GetComponent<DraggableItem>().itemData)
+            if(draggableItem.itemData == item)
             {
                 Debug.LogError("Đã có nguyên liệu: " + draggableItem.itemData.itemName);
                 return true;
@@ -94,16 +110,17 @@ public class Food : DraggableItem, IDropHandler
     private void CreateFoodItem()
     {
         foreach(var recipe in GameRecipe.Menu.recipes)
-        {
+        {   
             if(DoesRecipeMatch(itemsInSlot, recipe))
-            {
+            {   
+                
                 foreach (Transform child in this.transform)
                 {
                     Destroy(child.gameObject);
                 }
                 Debug.Log("Tạo thành món: " + recipe.foodName);
                 CreateNewFood(recipe);
-                itemsInSlot.Clear();
+                //itemsInSlot.Clear();
             }
         }
     }
@@ -114,17 +131,20 @@ public class Food : DraggableItem, IDropHandler
     {
         itemData = recipe.foodSO;
         //Tạo thành đồ ăn rồi sinh ra Object Clone chứa đồ ăn
-        clone = Instantiate(Resources.Load<GameObject>("Prefabs/EmptyFood"), this.transform);
+        if(isTo)
+            clone = Instantiate(Resources.Load<GameObject>("Prefabs/EmptyTo"), this.transform);
+        else
+            clone = Instantiate(Resources.Load<GameObject>("Prefabs/EmptyDia"), this.transform);
         clone.name = itemData.itemName;
         clone.GetComponent<Image>().sprite = itemData.icon;
     }
 
     private bool DoesRecipeMatch(List<ItemData> itemsInSlot, Recipe recipe)
     {
-        if (itemsInSlot.Count != recipe.ingredient.Count)
-        {
-            return false;
-        }
+        // if (itemsInSlot.Count != recipe.ingredient.Count)
+        // {
+        //     return false;
+        // }
 
         HashSet<ItemData> slotIngredients = new HashSet<ItemData>(itemsInSlot);
         HashSet<ItemData> recipeIngredients = new HashSet<ItemData>(recipe.ingredient);
@@ -135,12 +155,6 @@ public class Food : DraggableItem, IDropHandler
 
     private void AddIngredient(DraggableItem draggableItem)
     {
-        
-        if(IsSpiceFirstIngredient(draggableItem))
-        {
-            return;
-        }else
-        {
             ItemData draggedItem = draggableItem.itemData;
 
             // Di chuyển đối tượng clone vào vị trí của slot
@@ -152,9 +166,7 @@ public class Food : DraggableItem, IDropHandler
 
             // Kiểm tra nếu nguyên liệu đã tồn tại trong slot, tắt raycast để không cản trở thao tác kéo thả tiếp theo
             draggableItem.clone.GetComponent<CanvasGroup>().blocksRaycasts = false;
-
             Debug.Log("Đã thêm nguyên liệu vào slot."); 
-        }
     }
 
     private bool IsSpiceFirstIngredient(DraggableItem draggableItem)
@@ -203,13 +215,63 @@ public class Food : DraggableItem, IDropHandler
                 return type == SlotType.Ingredient || 
                     type == SlotType.Spice;
 
-            else if (slotType == SlotType.Drink)
-                return type == SlotType.Drink;
         }
         
         return false;
     }
 
+    
+
+    private void DropTo(DraggableItem draggableItem)
+    {
+        if(itemsInSlot.Count == 0)
+        {
+            if(draggableItem.GetSlotType() == SlotType.Kitchenware)
+            {
+                
+                if(draggableItem.itemData.name == "To")
+                    isTo = true;
+                else if(draggableItem.itemData.name == "Dia")
+                    isTo = false;
+                DoCheckAndAddIngredient(draggableItem, isTo);
+            }
+            else
+            {
+                
+                Destroy(draggableItem.clone.gameObject);
+            }
+        }else
+        {
+            DoCheckAndAddIngredient(draggableItem, isTo);
+        }
+    }
+
+    private void DoCheckAndAddIngredient(DraggableItem draggableItem, bool isTo)
+    {
+        if(isTo == true)
+        {
+            
+            DoAddIngredient(draggableItem, toList);
+        }else
+        {
+            
+            DoAddIngredient(draggableItem, diaList);
+        }
+    }
+
+    private void DoAddIngredient(DraggableItem draggableItem, List<SlotType> list)
+    {
+        if(draggableItem != null && itemsInSlot.Count < list.Count && draggableItem.GetSlotType() == list[itemsInSlot.Count] && 
+            !IsHaveBefore(draggableItem))
+        {
+            AddIngredient(draggableItem);
+            CreateFoodItem();
+        }
+        else
+        {
+            Destroy(draggableItem.clone.gameObject);
+        }
+    }
     
 
 

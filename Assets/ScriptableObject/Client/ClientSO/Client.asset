@@ -15,7 +15,4 @@ MonoBehaviour:
   clientName: Tizun
   clientSprite: {fileID: 21300000, guid: 22d1b051f256d8c47a5ef475d0a104be, type: 3}
   isPleasure: 0
-  listOfFoods:
-  - {fileID: 11400000, guid: 7fd9610077f974a458cec081c88b6202, type: 2}
-  - {fileID: 11400000, guid: 7fd9610077f974a458cec081c88b6202, type: 2}
-  - {fileID: 11400000, guid: 7fd9610077f974a458cec081c88b6202, type: 2}
+  listOfFoods: []

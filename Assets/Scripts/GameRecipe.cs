@@ -19,9 +19,11 @@ public static class GameRecipe
 
 public enum SlotType
 {
-    Food,
-    Drink,
+    Kitchenware,
     Ingredient,
+    Water,
+    Meat, 
     Spice,
-    Kitchenware
+    Food,
+    Kimchi,
 }

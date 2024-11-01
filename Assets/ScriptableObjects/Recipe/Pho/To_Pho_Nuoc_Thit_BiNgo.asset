@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 707023238cbfdfe44b3b89c14ba387ad, type: 3}
+  m_Name: To_Pho_Nuoc_Thit_BiNgo
+  m_EditorClassIdentifier: 
+  foodName: To_Pho_Nuoc_Thit_BiNgo
+  foodSO: {fileID: 11400000, guid: 8b41b2a6182edce428a8b4d783508d95, type: 2}
+  ingredient:
+  - {fileID: 11400000, guid: a16be106364ca854383983b4ec5af933, type: 2}
+  - {fileID: 11400000, guid: c352f6d1641eda54fa66c01c0097d596, type: 2}
+  - {fileID: 11400000, guid: c98c121bc9f516348b2df2ccc66fbc11, type: 2}
+  - {fileID: 11400000, guid: c1326c7fe7dc32a4fa18853b8e95b172, type: 2}
+  - {fileID: 11400000, guid: ec5579c795c0cb84b8f80a053e9fcbd5, type: 2}

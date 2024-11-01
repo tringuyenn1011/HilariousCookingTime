@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   seatName: C
   isUsing: 1
-  seatPosition: {x: -1875, y: 0}
+  seatPosition: {x: -1700, y: 290}

@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class ClientSpawner : MonoBehaviour
 {
     public ClientList clientList;
-    public RectTransform spawnPoint;
+    public Transform spawnPoint;
     public ClientSeatData endPoint;
     public SeatList seatList;
 
@@ -41,7 +41,7 @@ public class ClientSpawner : MonoBehaviour
     {
         GameObject clone = Instantiate(Resources.Load<GameObject>("Prefabs/EmptyClient"), spawnPoint);
         clone.name = clientData.clientName;
-        clone.GetComponent<Image>().sprite = clientData.clientSprite;
+        clone.transform.GetChild(1).GetComponent<Image>().sprite = clientData.clientSprite;
 
         Client clientComponent = clone.GetComponent<Client>();
         clientComponent.clientData = clientData;

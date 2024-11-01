@@ -9,23 +9,25 @@ public class Bullet : MonoBehaviour
 
     private Vector3 direction;
     private Slingshot slingshot;
+    public ItemData itemData;
 
     void Awake() 
     {
-        slingshot = this.GetComponentInParent<Slingshot>();
+        slingshot = GameObject.Find("Slingshot").GetComponent<Slingshot>();
         //this.GetComponent<Bullet>().enabled = true;    
+        
     }
     
     // Start is called before the first frame update
     void Start()
     {
-
+        //itemData = slingshot.itemData;
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(slingshot.direction * speed * Time.deltaTime);
+        transform.Translate(slingshot.direction * slingshot.force * Time.deltaTime);
 
         DestroyObject();
     }
@@ -38,10 +40,7 @@ public class Bullet : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        // Kiểm tra xem viên đạn va vào gì và xử lý logic tại đây
-        // Ví dụ: phá hủy viên đạn khi nó va chạm
+    private void OnCollisionEnter2D(Collision2D other) {
         Destroy(gameObject);
     }
     // public void Shoot(Vector3 foodForce)
@@ -59,7 +58,6 @@ public class Bullet : MonoBehaviour
     {
         
         // Vector3 foodForce = currentPosition - center.position;
-        // //Debug.Log("oke");
         // foodForce.z = 0;
         // Rigidbody2D rb = this.GetComponent<Rigidbody2D>();
         // rb.AddForce(foodForce.normalized * force * -1, ForceMode2D.Impulse);

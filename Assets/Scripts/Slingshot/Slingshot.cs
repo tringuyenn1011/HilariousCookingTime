@@ -39,6 +39,7 @@ public class Slingshot : MonoBehaviour
     // public RectTransform canvasRectTransform;
 
     public GameObject slingSlot;
+    public float second = 1;
 
     void Start()
     {
@@ -119,25 +120,41 @@ public class Slingshot : MonoBehaviour
         isMouseDown = true;
     }
 
-    private void OnMouseUp() {
+    private void OnMouseUp() 
+    {    
+        isMouseDown = false;
         if(itemData != null)
         {
             direction = center.transform.position - currentPosition;
-            foodPrefab = Instantiate(Resources.Load<GameObject>("Prefabs/EmptyProjectile"), currentPosition, Quaternion.identity,this.transform);
+            foodPrefab = Instantiate(Resources.Load<GameObject>("Prefabs/EmptyProjectile"), currentPosition, Quaternion.identity,GameObject.Find("Canvas").transform);
             foodPrefab.name = itemData.name;
-            foodPrefab.GetComponent<SpriteRenderer>().sprite = itemData.icon;
+            foodPrefab.GetComponent<Image>().sprite = itemData.icon;
+            foodPrefab.GetComponent<Bullet>().itemData = itemData;
 
             
             
             //GameObject clone = Instantiate(foodPrefab, this.transform);
             //Destroy(foodPrefab);
             //Shoot();
-            
+            StartCoroutine(Wait(second));
             SetObjectToOriginal();
+            
+            
+
         }
-        isMouseDown = false;
+
+
+        
     }
 
+    private IEnumerator Wait(float second)
+    {
+        yield return new WaitForSeconds(second);
+        GameObject.Find("DragDrop").GetComponent<UpDownCamera>().BackToOriginalCam();
+        this.gameObject.SetActive(false);
+    }
+
+    
     /// <summary>
     /// Cho projectile 1 lực force với hướng ngược lại của vector từ center đến con trỏ
     /// </summary>
@@ -194,6 +211,7 @@ public class Slingshot : MonoBehaviour
         foodRd.color = color;
 
         slingSlot.SetActive(true);
+        slingSlot.GetComponent<SlingSlot>().firstDrag.SetActive(true);
     }
 
     /// <summary>

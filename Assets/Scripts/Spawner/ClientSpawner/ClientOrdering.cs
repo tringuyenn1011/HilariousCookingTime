@@ -19,19 +19,18 @@ public class ClientOrdering : MonoBehaviour
         List<ItemData> orderedFoods = new List<ItemData>();
         // Chọn số lượng món ăn ngẫu nhiên từ 1 đến 3
         int foodCount = Random.Range(1, 4);
-
         // Tạo một danh sách các món ăn còn lại
-        List<ItemData> availableFoods = new List<ItemData>(client.clientData.listOfFoods);
+        List<Recipe> availableRecipes = new List<Recipe>(GameData.instance.Menu.recipesInMenu);
         
         // Đảm bảo danh sách có đủ món để chọn
-        for (int i = 0; i < foodCount && availableFoods.Count > 0; i++)
+        for (int i = 0; i < foodCount && availableRecipes.Count > 0; i++)
         {
             // Chọn ngẫu nhiên một món ăn
-            ItemData selectedFood = availableFoods[Random.Range(0, availableFoods.Count)];
+            Recipe selectedRecipe = availableRecipes[Random.Range(0, availableRecipes.Count)];
 
-            orderedFoods.Add(selectedFood);
+            orderedFoods.Add(selectedRecipe.foodSO);
             // Loại bỏ món ăn đã chọn để không bị trùng
-            availableFoods.Remove(selectedFood);
+            availableRecipes.Remove(selectedRecipe);
         }
 
         return orderedFoods;
@@ -50,7 +49,8 @@ public class ClientOrdering : MonoBehaviour
         Vector3 distanceBetweenFoods = new Vector3(0, 0, 0);
         foreach (var item in client.foodOrders)
         {
-            GameObject clone = Instantiate(Resources.Load<GameObject>("Prefabs/EmptyFood"), client.foods.transform);
+            GameObject clone = Instantiate(Resources.Load<GameObject>("Prefabs/EmptyTo"), client.foods.transform);
+            clone.GetComponent<BoxCollider2D>().enabled = false;
             clone.transform.localPosition += distanceBetweenFoods;
             distanceBetweenFoods += new Vector3(0, 120, 0);
             clone.name = item.name;

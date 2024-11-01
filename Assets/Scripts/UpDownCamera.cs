@@ -6,14 +6,22 @@ using UnityEngine;
 public class UpDownCamera : MonoBehaviour
 {
     public GameObject backGround;
-    public Vector3 upBgPos;
-    public Vector3 downBgPos;
-    public Vector3 originalBgPos;
+    // public Vector3 upBgPos;
+    // public Vector3 downBgPos;
+    // public Vector3 originalBgPos;
     public Vector2 upPos;
     public Vector2 downPos;
     private RectTransform parentTransform;
     private Vector3 currentBgPos;
+
+    public GameObject slingshot;
     public float moveDuration = 1f;
+
+    public GameObject upButton;
+    public GameObject downButton;
+
+    [HideInInspector]
+    public bool isCamMove = false;
 
 
     
@@ -24,22 +32,26 @@ public class UpDownCamera : MonoBehaviour
 
     public void DownCam()
     {
-        
-        
-        StartCoroutine(MoveCoroutine(downPos, downBgPos));    
+        isCamMove = true;
+        upButton.SetActive(true);
+        downButton.SetActive(false);
+        StartCoroutine(MoveCoroutine(downPos/*, downBgPos*/));    
     }
 
     public void BackToOriginalCam()
     {
-        StartCoroutine(MoveCoroutine(Vector2.zero, originalBgPos));  
+        isCamMove = false;
+        upButton.SetActive(false);
+        downButton.SetActive(true);
+        StartCoroutine(MoveCoroutine(Vector2.zero/*, originalBgPos*/));  
     }
 
     public void UpCam()
     {
-
+        StartCoroutine(MoveCoroutine(upPos/*, upBgPos*/));    
     }
 
-    private IEnumerator MoveCoroutine(Vector2 targetPosition, Vector3 targetBgPos)
+    private IEnumerator MoveCoroutine(Vector2 targetPosition/*, Vector3 targetBgPos*/)
     {
         currentBgPos = backGround.transform.position;
         Vector2 startPosition = parentTransform.anchoredPosition;
@@ -50,7 +62,7 @@ public class UpDownCamera : MonoBehaviour
             // Tính toán tỷ lệ (0-1) để Lerp
             float t = elapsedTime / moveDuration;
             parentTransform.anchoredPosition = Vector2.Lerp(startPosition, targetPosition, t);
-            backGround.transform.position = Vector3.Lerp(currentBgPos, targetBgPos, t);
+            //backGround.transform.position = Vector3.Lerp(currentBgPos, targetBgPos, t);
 
             elapsedTime += Time.deltaTime;
             yield return null; // Chờ đến frame tiếp theo
@@ -58,5 +70,12 @@ public class UpDownCamera : MonoBehaviour
 
         // Check đúng vị trí
         parentTransform.anchoredPosition = targetPosition;
+        //backGround.transform.position = targetBgPos;
+    }
+
+    public void CallSlingshot()
+    {
+        slingshot.SetActive(true);
+        UpCam();
     }
 }

@@ -83,7 +83,7 @@ public class Client : MonoBehaviour
     //      nếu không phải thì khách hàng tức giận
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!isPleasuring && collision.gameObject.CompareTag("Food"))
+        if (!isPleasuring && collision.GetComponent<Bullet>().itemData.slotType == SlotType.Food)
         {
             string foodName = collision.gameObject.name;
             var itemToRemove = foodOrders.FirstOrDefault(item => item.name == foodName);
@@ -98,8 +98,16 @@ public class Client : MonoBehaviour
             }
 
             clientOrdering.DisplayOrder(this);
+
+            // GameObject prefab = Resources.Load<GameObject>("Prefabs/FoodSlot");
+            // Instantiate(prefab, GameObject.Find("Slot").transform);
+            // //prefab.transform.position = collision.GetComponent<Food>().originalPosition;
         }
+
+        
+
         Destroy(collision.gameObject);
+
     }
 
 }
