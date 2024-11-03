@@ -1,0 +1,2 @@
+GameBackgroundMusic=Audio/bgm/game_bgm
+MenuBackgroundMusic=Audio/bgm/menu_bgm
