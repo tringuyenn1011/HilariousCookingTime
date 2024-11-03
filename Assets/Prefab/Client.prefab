@@ -100,4 +100,4 @@ MonoBehaviour:
   speed: 1
   clientSlots: []
   endPoint: {fileID: 0}
-  waitingTime: 20
+  waitingTime: 5

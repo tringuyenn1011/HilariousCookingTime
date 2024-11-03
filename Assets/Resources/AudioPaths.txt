@@ -1,2 +1,6 @@
 GameBackgroundMusic=Audio/bgm/game_bgm
 MenuBackgroundMusic=Audio/bgm/menu_bgm
+AngryClient=Audio/Client/client_angry
+ClientOrder=Audio/Client/client_order
+SlingshotDrag=Audio/Slingshot/slingshot_drag
+SlingshotDrop=Audio/Slingshot/slingshot_drop

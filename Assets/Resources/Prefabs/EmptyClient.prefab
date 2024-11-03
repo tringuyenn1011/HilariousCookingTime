@@ -185,7 +185,7 @@ MonoBehaviour:
   isPleasuring: 0
   isOrdering: 0
   isChoosingFoods: 0
-  waitingTime: 40
+  waitingTime: 5
   clientRectTransform: {fileID: 0}
 --- !u!114 &5227039160503731858
 MonoBehaviour:
@@ -199,6 +199,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9da5165bfbd874e428b8b3d25f2f8e78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isCompleted: 0
 --- !u!114 &5236709915765040102
 MonoBehaviour:
   m_ObjectHideFlags: 0

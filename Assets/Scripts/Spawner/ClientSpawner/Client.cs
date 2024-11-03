@@ -59,6 +59,7 @@ public class Client : MonoBehaviour
         if (isOrdering && !isChoosingFoods)
         {
             Debug.Log("Khách hàng Order");
+            AudioManager.instance.PlaySound("ClientOrder");
             thinking.SetActive(true);
             clientOrdering.Order(this);
             isChoosingFoods = true;

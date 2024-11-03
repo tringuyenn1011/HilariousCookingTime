@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    public static AudioManager Instance;
+    public static AudioManager instance;
 
     private Dictionary<string, AudioClip> audioClips = new Dictionary<string, AudioClip>();
     public AudioSource musicSource;
@@ -13,9 +13,9 @@ public class AudioManager : MonoBehaviour
 
     void Awake()
     {
-        if (Instance == null)
+        if (instance == null)
         {
-            Instance = this;
+            instance = this;
             DontDestroyOnLoad(gameObject);
             LoadAudioClips();
         }
@@ -27,7 +27,8 @@ public class AudioManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        musicSource.volume = 0.5f;
+        sfxSource.volume = 1f;
     }
 
     // Update is called once per frame

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ClientMoving : MonoBehaviour
 {
+    
     private ClientSeatData seatStoredPosition;
     public bool isCompleted = false;
 
@@ -83,6 +84,9 @@ public class ClientMoving : MonoBehaviour
                     GameData.instance.AddPoints(-500);
                     
                     GameData.instance.LoseLife();
+                    AudioManager.instance.PlaySound("AngryClient");
+
+
                 }
                 seatStoredPosition.isUsing = false;
                 client.destination = client.endPoint.seatPosition;

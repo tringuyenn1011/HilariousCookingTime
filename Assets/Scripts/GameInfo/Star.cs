@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class Star : MonoBehaviour
 {
     public Sprite offStar;
+    public GameObject loseBG;
     // Start is called before the first frame update
     void Start()
     {
@@ -43,6 +44,8 @@ public class Star : MonoBehaviour
         if (GameData.instance.Lives <= 0)
         {
             Debug.Log("Game Over!");
+            loseBG.SetActive(true);
+
         }
     }
 }

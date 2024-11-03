@@ -127,6 +127,7 @@ public class Slingshot : MonoBehaviour
         isDragging = true;
         if(itemData != null && itemData.slotType == SlotType.Food)
         {
+            AudioManager.instance.PlaySound("SlingshotDrag");
             startMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             startObjectPosition = transform.position;
             if (isMouseDown)
@@ -180,14 +181,16 @@ public class Slingshot : MonoBehaviour
         isDragging = false;
         if(itemData != null)
         {
+            AudioManager.instance.PlaySound("SlingshotDrop");
             direction = center.transform.position - currentPosition;
             direction.z = 1000f;
             direction.Normalize(); // Chuẩn hóa hướng bắn
             Debug.LogWarning(direction);
 
-            foodPrefab = Instantiate(Resources.Load<GameObject>("Prefabs/EmptyProjectile"), currentPosition, Quaternion.identity,GameObject.Find("Canvas").transform);
+            foodPrefab = Instantiate(Resources.Load<GameObject>("Prefabs/EmptyProjectile"), currentPosition, Quaternion.identity,GameObject.Find("Canvas").transform.GetChild(0));
             foodPrefab.name = itemData.name;
             foodPrefab.GetComponent<Image>().sprite = itemData.icon;
+            foodPrefab.GetComponent<Image>().SetNativeSize();
             foodPrefab.GetComponent<Bullet>().itemData = itemData;
 
             // Gán hướng bắn cho viên đạn
@@ -204,7 +207,7 @@ public class Slingshot : MonoBehaviour
     private Vector3 CalculateInitialVelocity(Vector3 direction)
     {
         float speed = 700f; // Tốc độ ban đầu (có thể thay đổi)
-        float arcHeight = 2000f; // Độ cao của quỹ đạo (có thể thay đổi)
+        float arcHeight = 1700f; // Độ cao của quỹ đạo (có thể thay đổi)
         
         // Tính toán vận tốc ban đầu theo hướng đã chuẩn hóa
         Vector3 initialVelocity = direction * speed;
