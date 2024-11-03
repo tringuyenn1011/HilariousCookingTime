@@ -26,7 +26,7 @@ public abstract class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHan
         canvasGroup = GetComponent<CanvasGroup>();
         rectTransform = GetComponent<RectTransform>();
         dragDrop = GameObject.Find("DragDrop").GetComponent<UpDownCamera>();
-        originalPosition = rectTransform.anchoredPosition; // Lưu vị trí ban đầu
+        //originalPosition = rectTransform.anchoredPosition; // Lưu vị trí ban đầu
     }
 
     public virtual void OnBeginDrag(PointerEventData eventData)

@@ -81,20 +81,24 @@ public class Client : MonoBehaviour
     //  tên món ăn trùng với foodOrder
     //      thì foodOrders remove món ăn đó (foodOrders = 0 thì khách hàng thỏa mãn)
     //      nếu không phải thì khách hàng tức giận
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter(Collider collision)
     {
+        
         if (!isPleasuring && collision.GetComponent<Bullet>().itemData.slotType == SlotType.Food)
         {
             string foodName = collision.gameObject.name;
             var itemToRemove = foodOrders.FirstOrDefault(item => item.name == foodName);
             if (itemToRemove != null)
             {
+                Debug.LogWarning("giaothanhcong");
+                GameData.instance.AddPoints(200);
+                GameData.instance.AddMoney(50);
                 foodOrders.Remove(itemToRemove);
-                Debug.Log(foodOrders);
             }
             else
             {
                 //Vứt cái bánh nơi mặt
+                GameData.instance.AddPoints(-100);
             }
 
             clientOrdering.DisplayOrder(this);

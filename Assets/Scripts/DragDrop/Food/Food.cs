@@ -15,6 +15,8 @@ public class Food : DraggableItem, IDropHandler
 
     private bool isTo = true;
 
+    public Vector2 originPosition;
+
     private Dictionary<string, List<SlotType>> foodOrders = new Dictionary<string, List<SlotType>>()
     {
         { "Tô", new List<SlotType> { SlotType.Kitchenware, SlotType.Ingredient, SlotType.Water, SlotType.Meat, SlotType.Spice } },
@@ -29,6 +31,7 @@ public class Food : DraggableItem, IDropHandler
     public override void Awake() 
     {
         base.Awake();
+        rectTransform.anchoredPosition = originPosition; 
         parentTransform = this.transform.parent;  
     }
 
@@ -36,7 +39,7 @@ public class Food : DraggableItem, IDropHandler
 
     public override void OnBeginDrag(PointerEventData eventData)
     {
-        originalPosition = rectTransform.anchoredPosition;
+        //originalPosition = rectTransform.anchoredPosition;
         this.gameObject.transform.SetParent(canvas.transform);
         canvasGroup.blocksRaycasts = false;
     }
@@ -120,6 +123,8 @@ public class Food : DraggableItem, IDropHandler
                 }
                 Debug.Log("Tạo thành món: " + recipe.foodName);
                 CreateNewFood(recipe);
+                if(recipe.foodSO.isCompleted)
+                    GameData.instance.AddPoints(100);
                 //itemsInSlot.Clear();
             }
         }
@@ -196,7 +201,7 @@ public class Food : DraggableItem, IDropHandler
             transform.SetParent(parentTransform);
 
             canvasGroup.blocksRaycasts = true;
-            rectTransform.anchoredPosition = originalPosition;
+            rectTransform.anchoredPosition = originPosition;
         
     }
 

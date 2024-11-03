@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Dia
   m_EditorClassIdentifier: 
   foodName: Dia
-  foodSO: {fileID: 11400000, guid: 0c338035c48feb54ba37b87dbcca6b70, type: 2}
+  foodSO: {fileID: 11400000, guid: ed0fc7c9f376e1542be76dc6751fda10, type: 2}
   ingredient:
   - {fileID: 11400000, guid: 0c338035c48feb54ba37b87dbcca6b70, type: 2}

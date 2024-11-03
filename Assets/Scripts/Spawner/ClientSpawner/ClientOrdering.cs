@@ -17,8 +17,10 @@ public class ClientOrdering : MonoBehaviour
     public List<ItemData> ChooseRandomFoods(Client client)
     {
         List<ItemData> orderedFoods = new List<ItemData>();
-        // Chọn số lượng món ăn ngẫu nhiên từ 1 đến 3
-        int foodCount = Random.Range(1, 4);
+        int foodCount = ChangeRandomFood();
+        int recipeCount = ChangeDifficultFood();
+        
+        
         // Tạo một danh sách các món ăn còn lại
         List<Recipe> availableRecipes = new List<Recipe>(GameData.instance.Menu.recipesInMenu);
         
@@ -26,7 +28,7 @@ public class ClientOrdering : MonoBehaviour
         for (int i = 0; i < foodCount && availableRecipes.Count > 0; i++)
         {
             // Chọn ngẫu nhiên một món ăn
-            Recipe selectedRecipe = availableRecipes[Random.Range(0, availableRecipes.Count)];
+            Recipe selectedRecipe = availableRecipes[Random.Range(0, recipeCount)];
 
             orderedFoods.Add(selectedRecipe.foodSO);
             // Loại bỏ món ăn đã chọn để không bị trùng
@@ -35,6 +37,46 @@ public class ClientOrdering : MonoBehaviour
 
         return orderedFoods;
     }
+
+    private int ChangeRandomFood()
+    {
+        int count = 2;
+        // Chọn số lượng món ăn ngẫu nhiên từ 1 đến 3
+        if(GameData.instance.Timer > 120)
+        {
+            count = Random.Range(1, 3);
+            
+        }else if(GameData.instance.Timer > 240)
+        {
+            count = Random.Range(1, 4);
+        }else
+        {
+            count = 1;
+        }
+
+        return count;
+    }
+
+    private int ChangeDifficultFood()
+    {
+        int count = 4;
+        // Chọn số lượng món ăn ngẫu nhiên từ 1 đến 3
+        if(GameData.instance.Timer > 180)
+        {
+            count = 8;
+        }else if(GameData.instance.Timer > 360)
+        {
+            count = GameData.instance.Menu.recipesInMenu.Count;
+        }else
+        {
+            count = 4;
+        }
+
+        return count;
+    }
+
+
+
 
     public void DisplayOrder(Client client)
     {

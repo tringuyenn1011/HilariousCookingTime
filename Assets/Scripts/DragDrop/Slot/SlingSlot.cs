@@ -20,8 +20,7 @@ public class SlingSlot : MonoBehaviour, IDropHandler
     {
         DraggableItem draggableItem = eventData.pointerDrag.gameObject.GetComponent<DraggableItem>();
         
-        
-        
+
         if(draggableItem.itemData != null && draggableItem.itemData.slotType == SlotType.Food && draggableItem.itemData.isCompleted)
         {   
             Debug.Log("prepare food On Sling");
@@ -32,8 +31,11 @@ public class SlingSlot : MonoBehaviour, IDropHandler
             slingshot.SetFood();
 
             GameObject prefab = Resources.Load<GameObject>("Prefabs/FoodSlot");
+            prefab.GetComponent<Food>().originPosition = eventData.pointerDrag.GetComponent<Food>().originPosition;
             Instantiate(prefab, GameObject.Find("Slot").transform);
-            prefab.transform.position = eventData.pointerDrag.GetComponent<Food>().originalPosition;
+
+            // prefab.GetComponent<RectTransform>().anchoredPosition = eventData.pointerDrag.GetComponent<Food>().originPosition;
+            // prefab.GetComponent<Food>().originPosition = prefab.GetComponent<RectTransform>().anchoredPosition;
             Destroy(draggableItem.gameObject);
             this.gameObject.SetActive(false);
         }else

@@ -10,6 +10,9 @@ public class GameData : MonoBehaviour
     private int point = 0;
     private int lives = 5;
 
+    private float timer = 0f;
+    private bool isPlayGame = false;
+
     public Menu Menu { get; private set; }
 
     public int Money
@@ -30,6 +33,22 @@ public class GameData : MonoBehaviour
         set { lives = value; }
     }
 
+    public float Timer
+    {
+        get { return timer; }
+        set { timer = value; }
+    }
+
+    public bool IsPlayGame
+    {
+        get { return isPlayGame; }
+        set { isPlayGame = value; }
+    }
+
+    private Currency currencycpn;
+    private Point pointcpn;
+    private Star starcpn;
+
     void Awake()
     {
         if (instance == null)
@@ -42,6 +61,14 @@ public class GameData : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        
+    }
+
+    void Update()
+    {
+        // Tăng thời gian theo thời gian đã trôi qua mỗi frame
+        timer += Time.deltaTime;
     }
 
     private void LoadMenu()
@@ -56,19 +83,22 @@ public class GameData : MonoBehaviour
     // Các phương thức để thao tác với dữ liệu
     public void AddMoney(int amount)
     {
-        money += amount;
+        currencycpn = GameObject.Find("Currency").GetComponent<Currency>();
+        currencycpn.AddMoney(amount);
         Debug.Log($"Đã thêm {amount} tiền. Tổng tiền hiện tại: {money}");
     }
 
     public void AddPoints(int amount)
     {
-        point += amount;
+        pointcpn = GameObject.Find("Point").GetComponent<Point>();
+        pointcpn.AddPoint(amount);
         Debug.Log($"Đã thêm {amount} điểm. Tổng điểm hiện tại: {point}");
     }
 
     public void LoseLife()
     {
-        lives--;
+        starcpn = GameObject.Find("Star").GetComponent<Star>();
+        starcpn.LoseLife();
         Debug.Log($"Mất 1 mạng. Số mạng còn lại: {lives}");
     }
 }

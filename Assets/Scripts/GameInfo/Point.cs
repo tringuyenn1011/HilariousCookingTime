@@ -12,7 +12,7 @@ public class Point : MonoBehaviour
     }
     void Start()
     {
-        data.text = "0";
+        data.text = string.Format("Point: {0}", 0);
     }
 
     // Update is called once per frame
@@ -24,6 +24,8 @@ public class Point : MonoBehaviour
     public void AddPoint(int point)
     {
         GameData.instance.Point += point;
-        data.text = string.Format("{0}",GameData.instance.Money);
+        if(GameData.instance.Point <0)
+            GameData.instance.Point = 0;
+        data.text = string.Format("Point: {0}",GameData.instance.Point);
     }
 }

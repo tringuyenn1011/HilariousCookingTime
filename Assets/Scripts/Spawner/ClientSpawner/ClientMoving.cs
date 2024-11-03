@@ -5,6 +5,9 @@ using UnityEngine;
 public class ClientMoving : MonoBehaviour
 {
     private ClientSeatData seatStoredPosition;
+    public bool isCompleted = false;
+
+    private bool isMove = false;
     // Nếu còn chỗ trống và chưa đi qua chỗ trống thì đến chỗ trống đó
     // Nếu ngồi vào chỗ thì order
     // Nếu hết chỗ thì đi khỏi quầy
@@ -53,12 +56,40 @@ public class ClientMoving : MonoBehaviour
         {
             client.waitingTime -= Time.deltaTime;
             client.timerBar.value = client.waitingTime;
+            // if(client.isPleasuring)
+            // {
+            //     GameData.instance.AddPoints(300);
+            //     GameData.instance.AddMoney(Random.Range(5,16));
+            // }
+                
+            // else if(client.waitingTime < 0)
+            // {
+            //     GameData.instance.AddPoints(-500);
+            //     Debug.LogWarning(client.clientRectTransform.anchoredPosition);
+            //     GameData.instance.LoseLife();
+            // }
+                
+
             if (client.isPleasuring || client.waitingTime < 0)
             {
+                if(client.isPleasuring)
+                {
+                    GameData.instance.AddPoints(300);
+                    GameData.instance.AddMoney(Random.Range(5,16));
+                }
+                    
+                else if(client.waitingTime < 0)
+                {
+                    GameData.instance.AddPoints(-500);
+                    
+                    GameData.instance.LoseLife();
+                }
                 seatStoredPosition.isUsing = false;
                 client.destination = client.endPoint.seatPosition;
                 client.isOrdering = false;
                 client.thinking.SetActive(false);
+                client.waitingTime = 0;
+                
             }
         }
     }

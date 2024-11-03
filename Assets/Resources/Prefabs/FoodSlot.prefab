@@ -155,3 +155,4 @@ MonoBehaviour:
   originalPosition: {x: 0, y: 0}
   itemsInSlot: []
   slotType: 0
+  originPosition: {x: 0, y: -773.6}

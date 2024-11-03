@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 707023238cbfdfe44b3b89c14ba387ad, type: 3}
-  m_Name: To
+  m_Script: {fileID: 11500000, guid: 98754b9c711e1fe43bc7eeeb752b43d6, type: 3}
+  m_Name: Dia
   m_EditorClassIdentifier: 
-  foodName: To
-  foodSO: {fileID: 11400000, guid: 561add01a6aace44cb10acda615a98e6, type: 2}
-  ingredient:
-  - {fileID: 11400000, guid: a16be106364ca854383983b4ec5af933, type: 2}
+  itemName: Dia
+  slotType: 5
+  icon: {fileID: 21300000, guid: af998f9a46b8efe44b70f15619de7545, type: 3}
+  isCompleted: 0

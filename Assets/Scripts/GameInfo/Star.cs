@@ -21,7 +21,7 @@ public class Star : MonoBehaviour
 
     public void LoseLife()
     {
-        GameData.instance.LoseLife();
+        //GameData.instance.LoseLife();
         UpdateStars();
         CheckGameOver();
     }
@@ -30,6 +30,7 @@ public class Star : MonoBehaviour
 
     private void UpdateStars()
     {
+        GameData.instance.Lives -= 1;
         int countStar = transform.childCount; 
         int lives = GameData.instance.Lives;
         for(int i=countStar-1; i>lives-1; i--)
