@@ -16,18 +16,46 @@ public class Bullet : MonoBehaviour
     private Vector3 velocity;       // Vận tốc của viên đạn
     public float gravity = -9.81f;  // Gia tốc trọng lực (có thể điều chỉnh)
 
+    private bool isMovingLeft = false;
+    private float targetX = 0f;
+    private GameManager gameManager;
+    public bool isSlingshot = false;
+    private RectTransform rectTransform;
+    private Vector2 initialScale;
+    private Vector3 startPosition;
+    private Vector3 targetPosition;
+    private Vector3 targetScale;
+    private float lerpTime;
+    
+
     void Awake() 
     {
-        slingshot = GameObject.Find("Slingshot").GetComponent<Slingshot>();
-        //this.GetComponent<Bullet>().enabled = true;    
         rb = GetComponent<Rigidbody>();
+        if(isSlingshot)
+        {
+            slingshot = GameObject.Find("Slingshot").GetComponent<Slingshot>();
+        }else
+        {
+            rb.useGravity = false;
+        }
         
+        //this.GetComponent<Bullet>().enabled = true;    
+        
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        rectTransform  = GetComponent<RectTransform>();
     }
     
     // Start is called before the first frame update
     void Start()
     {
+        startPosition = transform.localPosition;
+        targetPosition = Vector3.zero;
+        targetScale = transform.localScale *3f;
         //itemData = slingshot.itemData;
+        targetX = transform.localPosition.x - 500;
+        initialScale = rectTransform.localScale;
+
+        lerpTime = 0f;
     }
 
     // Update is called once per frame
@@ -44,8 +72,42 @@ public class Bullet : MonoBehaviour
 
         // //DestroyObject();
         // Cập nhật vị trí viên đạn
-        velocity.y += gravity * Time.deltaTime; // Cộng thêm gia tốc trọng lực
-        transform.localPosition += velocity * Time.deltaTime; // Di chuyển viên đạn theo vị trí cục bộ trong Canvas
+        if(isSlingshot)
+        {
+            velocity.y += gravity * Time.deltaTime; // Cộng thêm gia tốc trọng lực
+            transform.localPosition += velocity * Time.deltaTime; // Di chuyển viên đạn theo vị trí cục bộ trong Canvas
+            
+            if(transform.localPosition.y > 600 && !isMovingLeft && gameManager.isWind)
+            {
+                isMovingLeft = true;
+            }
+
+            if(isMovingLeft)
+            {
+                float newX = Mathf.Lerp(transform.localPosition.x, targetX, Time.deltaTime / 1f);
+                transform.localPosition = new Vector3(newX, transform.localPosition.y, transform.localPosition.z);
+                if (Mathf.Abs(transform.localPosition.x - targetX) < 0.01f)
+                {
+                    isMovingLeft = false; // Dừng lại sau khi đạt mục tiêu
+                }
+            }
+        }else if(gameManager.isRandom && !isSlingshot)
+        {
+            Debug.LogWarning("Client bắn ra");
+            // Tăng giá trị Lerp theo thời gian dựa trên speed
+            lerpTime += 1f * Time.deltaTime ;
+            lerpTime = Mathf.Clamp01(lerpTime); // Giữ giá trị trong khoảng từ 0 đến 1
+            
+            rectTransform.anchoredPosition3D = Vector3.Lerp(startPosition, targetPosition, lerpTime);
+            rectTransform.localScale = Vector3.Lerp(initialScale, targetScale, lerpTime);
+            rectTransform.Rotate(0, 0, 360 * 2 * Time.deltaTime);
+            if(rectTransform.localScale.x >= targetScale.x)
+            {
+                //Sinh vet ban ra
+                Destroy(this.gameObject);
+            }
+        }
+        
 
         // Kiểm tra xem viên đạn có vượt quá giới hạn nào đó không, nếu có thì hủy
         // if (transform.localPosition.z >= 1000f || transform.localPosition.y < 0) // hoặc một giá trị khác tùy thuộc vào thiết kế game

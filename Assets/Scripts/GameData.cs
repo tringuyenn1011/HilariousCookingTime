@@ -8,9 +8,9 @@ public class GameData : MonoBehaviour
 
     private int money = 0;
     private int point = 0;
-    private int lives = 5;
+    public int lives = 5;
 
-    private float timer = 0f;
+    public float timer = 0f;
     private bool isPlayGame = false;
 
     public Menu Menu { get; private set; }

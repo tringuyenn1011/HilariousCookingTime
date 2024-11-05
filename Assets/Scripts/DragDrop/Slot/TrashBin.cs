@@ -14,7 +14,6 @@ public class TrashBin : MonoBehaviour, IDropHandler
             GameObject prefab = Resources.Load<GameObject>("Prefabs/FoodSlot");
             Instantiate(prefab, GameObject.Find("Slot").transform);
             prefab.transform.position = eventData.pointerDrag.GetComponent<Food>().originalPosition;
-            //Debug.LogWarning(eventData.pointerDrag.GetComponent<Food>().originalPosition);
             Destroy(eventData.pointerDrag.gameObject);
         }
             

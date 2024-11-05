@@ -145,7 +145,7 @@ public class Slingshot : MonoBehaviour
                 // // Tính giá trị vector từ vị trí center đến vị trí con trỏ trên canvas
                 currentPosition = center.position + Vector3.ClampMagnitude(currentPosition - center.position, maxLength);
                 currentPosition = ClampBoundary(currentPosition);
-                Debug.LogWarning(currentPosition);
+                
                 currentPosition = new Vector3(transform.position.x, -3.5f, 110);
                 SetStrips(currentPosition);
                 // if (dishCollider)
@@ -185,9 +185,13 @@ public class Slingshot : MonoBehaviour
             direction = center.transform.position - currentPosition;
             direction.z = 1000f;
             direction.Normalize(); // Chuẩn hóa hướng bắn
-            Debug.LogWarning(direction);
+            
 
-            foodPrefab = Instantiate(Resources.Load<GameObject>("Prefabs/EmptyProjectile"), currentPosition, Quaternion.identity,GameObject.Find("Canvas").transform.GetChild(0));
+            
+            GameObject prefab = Resources.Load<GameObject>("Prefabs/EmptyProjectile");
+            prefab.GetComponent<Bullet>().isSlingshot = true;
+            foodPrefab = Instantiate(prefab, currentPosition, Quaternion.identity,GameObject.Find("Canvas").transform.GetChild(0));
+
             foodPrefab.name = itemData.name;
             foodPrefab.GetComponent<Image>().sprite = itemData.icon;
             foodPrefab.GetComponent<Image>().SetNativeSize();

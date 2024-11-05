@@ -13,4 +13,9 @@ MonoBehaviour:
   m_Name: ListOfClients
   m_EditorClassIdentifier: 
   listOfClients:
-  - {fileID: 11400000, guid: 9f58f5f65c020f54fbfe3759ed63628d, type: 2}
+  - {fileID: 11400000, guid: 328977ff6ff695c4fabd781eab3f83a9, type: 2}
+  - {fileID: 11400000, guid: 6037660d65333b347a76e7aae51214ca, type: 2}
+  - {fileID: 11400000, guid: 1aa0d94227e167444abbc3c6c2ce391b, type: 2}
+  - {fileID: 11400000, guid: a7c77b803b29c7f4393d7b20510eb38d, type: 2}
+  - {fileID: 11400000, guid: dff5ed211a5986f4a92790c008bdd4b0, type: 2}
+  - {fileID: 11400000, guid: 0b6e6d6193b2d6b479b635027ccf6ffd, type: 2}

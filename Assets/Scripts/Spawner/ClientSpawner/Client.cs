@@ -36,6 +36,8 @@ public class Client : MonoBehaviour
     public float waitingTime = 20f;
     [HideInInspector]
     public RectTransform clientRectTransform;
+
+    public GameObject shoot;
     private void Awake()
     {
         clientRectTransform = GetComponent<RectTransform>();
@@ -51,6 +53,7 @@ public class Client : MonoBehaviour
         thinking.SetActive(false);
         timerBar.maxValue = waitingTime;
         timerBar.value = waitingTime;
+        this.GetComponent<CanvasGroup>().alpha = 0.5f;
     }
 
     private void Update()
@@ -62,6 +65,11 @@ public class Client : MonoBehaviour
             AudioManager.instance.PlaySound("ClientOrder");
             thinking.SetActive(true);
             clientOrdering.Order(this);
+
+            timerBar.maxValue = SetTimeToWait();
+            timerBar.value = timerBar.maxValue;
+            waitingTime = timerBar.maxValue;
+            
             isChoosingFoods = true;
         }
 
@@ -78,20 +86,34 @@ public class Client : MonoBehaviour
         }
     }
 
+    private float SetTimeToWait()
+    {
+        float time = 0;
+        if(foodOrders.Count == 2)
+            time = Random.Range(40f, 45f);
+        else if(foodOrders.Count == 3)
+            time = Random.Range(45f, 50f);
+        else
+            time = Random.Range(39f, 40f);
+        
+        return time;
+    }
+
     //Nếu tag là food
     //  tên món ăn trùng với foodOrder
     //      thì foodOrders remove món ăn đó (foodOrders = 0 thì khách hàng thỏa mãn)
     //      nếu không phải thì khách hàng tức giận
     private void OnTriggerEnter(Collider collision)
     {
+        Bullet bullet = collision.GetComponent<Bullet>();
         
-        if (!isPleasuring && collision.GetComponent<Bullet>().itemData.slotType == SlotType.Food)
+        if (!isPleasuring && bullet.itemData.slotType == SlotType.Food)
         {
             string foodName = collision.gameObject.name;
             var itemToRemove = foodOrders.FirstOrDefault(item => item.name == foodName);
             if (itemToRemove != null)
             {
-                Debug.LogWarning("giaothanhcong");
+                Debug.Log("giaothanhcong");
                 GameData.instance.AddPoints(200);
                 GameData.instance.AddMoney(50);
                 foodOrders.Remove(itemToRemove);
@@ -100,6 +122,12 @@ public class Client : MonoBehaviour
             {
                 //Vứt cái bánh nơi mặt
                 GameData.instance.AddPoints(-100);
+
+                if(GameObject.Find("GameManager").GetComponent<GameManager>().IsEventRandom(50f))
+                {
+                    InstantiateBullet(bullet);
+                }
+                
             }
 
             clientOrdering.DisplayOrder(this);
@@ -113,6 +141,18 @@ public class Client : MonoBehaviour
 
         Destroy(collision.gameObject);
 
+    }
+
+    public void InstantiateBullet(Bullet bullet)
+    {
+        
+        GameObject prefab = Resources.Load<GameObject>("Prefabs/EmptyProjectile");
+        prefab.GetComponent<Bullet>().isSlingshot = false;
+        GameObject foodPrefab = Instantiate(prefab, shoot.transform.position, Quaternion.identity,GameObject.Find("Canvas").transform.GetChild(0));
+        foodPrefab.name = bullet.itemData.name;
+        foodPrefab.GetComponent<Image>().sprite = bullet.itemData.icon;
+        foodPrefab.GetComponent<Image>().SetNativeSize();
+        foodPrefab.GetComponent<Bullet>().itemData = bullet.itemData;
     }
 
 }

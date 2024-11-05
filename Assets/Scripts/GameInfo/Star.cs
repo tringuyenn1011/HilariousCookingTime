@@ -34,18 +34,21 @@ public class Star : MonoBehaviour
         GameData.instance.Lives -= 1;
         int countStar = transform.childCount; 
         int lives = GameData.instance.Lives;
-        for(int i=countStar-1; i>lives-1; i--)
+        if(lives >= 0)
         {
-            transform.GetChild(i).GetComponent<Image>().sprite = offStar;
+            for(int i=countStar-1; i>lives-1; i--)
+            {
+                transform.GetChild(i).GetComponent<Image>().sprite = offStar;
+            }
         }
+    
     }
     private void CheckGameOver()
     {
         if (GameData.instance.Lives <= 0)
         {
-            Debug.Log("Game Over!");
-            loseBG.SetActive(true);
-
+            GameObject.Find("GameFunction").GetComponent<GameFunction>().ClientWhenGameOver();
+            
         }
     }
 }

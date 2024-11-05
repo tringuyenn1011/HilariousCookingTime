@@ -65,7 +65,7 @@ public class AudioManager : MonoBehaviour
                     }
                     else
                     {
-                        Debug.LogWarning("Không tìm thấy âm thanh ở đường dẫn: " + resourcePath);
+                        Debug.LogError("Không tìm thấy âm thanh ở đường dẫn: " + resourcePath);
                     }
                 }
             }
@@ -84,7 +84,7 @@ public class AudioManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Không tìm thấy âm thanh với tên: " + name);
+            Debug.LogError("Không tìm thấy âm thanh với tên: " + name);
         }
     }
 
@@ -98,7 +98,7 @@ public class AudioManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Không tìm thấy nhạc với tên: " + name);
+            Debug.LogError("Không tìm thấy nhạc với tên: " + name);
         }
     }
 

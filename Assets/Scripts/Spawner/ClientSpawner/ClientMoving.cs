@@ -32,6 +32,7 @@ public class ClientMoving : MonoBehaviour
         {
             if (!client.isOrdering && client.clientRectTransform.anchoredPosition.x == seatStoredPosition.seatPosition.x)
             {
+                
                 client.isOrdering = true;
             }
         }
@@ -55,6 +56,7 @@ public class ClientMoving : MonoBehaviour
 
         if (client.isOrdering)
         {
+            client.GetComponent<CanvasGroup>().alpha = 1f;
             client.waitingTime -= Time.deltaTime;
             client.timerBar.value = client.waitingTime;
             // if(client.isPleasuring)
@@ -73,6 +75,7 @@ public class ClientMoving : MonoBehaviour
 
             if (client.isPleasuring || client.waitingTime < 0)
             {
+                client.GetComponent<CanvasGroup>().alpha = 0.5f;
                 if(client.isPleasuring)
                 {
                     GameData.instance.AddPoints(300);

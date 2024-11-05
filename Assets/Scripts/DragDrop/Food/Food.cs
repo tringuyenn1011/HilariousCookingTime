@@ -124,7 +124,12 @@ public class Food : DraggableItem, IDropHandler
                 Debug.Log("Tạo thành món: " + recipe.foodName);
                 CreateNewFood(recipe);
                 if(recipe.foodSO.isCompleted)
-                    GameData.instance.AddPoints(100);
+                {
+                    int scoreGained = 100;
+                    GameData.instance.AddPoints(scoreGained);
+                    FindObjectOfType<GameFunction>().ShowPointPopup(this.GetComponent<RectTransform>().anchoredPosition, scoreGained, this.transform);
+                }
+                    
                 //itemsInSlot.Clear();
             }
         }

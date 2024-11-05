@@ -39,14 +39,20 @@ public class ClientSpawner : MonoBehaviour
     }
     public void spawnClient(ClientData clientData)
     {
-        GameObject clone = Instantiate(Resources.Load<GameObject>("Prefabs/EmptyClient"), spawnPoint);
-        clone.name = clientData.clientName;
-        clone.transform.GetChild(1).GetComponent<Image>().sprite = clientData.clientSprite;
+        if(!GameObject.Find("GameFunction").GetComponent<GameFunction>().isLose)
+        {
+            GameObject clone = Instantiate(Resources.Load<GameObject>("Prefabs/EmptyClient"), spawnPoint);
+            clone.name = clientData.clientName;
+            clone.transform.GetChild(1).GetComponent<Image>().sprite = clientData.clientSprite;
 
-        Client clientComponent = clone.GetComponent<Client>();
-        clientComponent.clientData = clientData;
-        clientComponent.seatList = seatList;
-        clientComponent.endPoint = endPoint;
+            Client clientComponent = clone.GetComponent<Client>();
+            clientComponent.clientData = clientData;
+            clientComponent.seatList = seatList;
+            clientComponent.endPoint = endPoint;
+
+            clone.transform.SetAsFirstSibling();
+        }
+
 
     }
 }

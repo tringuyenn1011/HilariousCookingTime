@@ -93,6 +93,7 @@ MonoBehaviour:
   speed: 5
   itemData: {fileID: 0}
   gravity: -9.81
+  isSlingshot: 0
 --- !u!54 &7198524159393352260
 Rigidbody:
   m_ObjectHideFlags: 0
