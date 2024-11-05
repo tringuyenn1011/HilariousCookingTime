@@ -10,7 +10,10 @@ public class GameData : MonoBehaviour
     private int point = 0;
     public int lives = 5;
 
-    public float timer = 0f;
+    private float timer = 0f;
+
+    private string playerName;
+    private int score;
     private bool isPlayGame = false;
 
     public Menu Menu { get; private set; }
@@ -37,6 +40,18 @@ public class GameData : MonoBehaviour
     {
         get { return timer; }
         set { timer = value; }
+    }
+
+    public string PlayerName
+    {
+        get { return playerName; }
+        set { playerName = value; }
+    }
+
+    public int Score
+    {
+        get { return score; }
+        set { score = value; }
     }
 
     public bool IsPlayGame

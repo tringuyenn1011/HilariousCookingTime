@@ -48,6 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1590630aaa27174d88d9369f03434e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lives: 5
 --- !u!114 &3199833760324867442
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -74,6 +75,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a9727172e561c74db4e2f7d8734ee5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isWind: 0
+  isRandom: 0
 --- !u!82 &1599775037459894682
 AudioSource:
   m_ObjectHideFlags: 0

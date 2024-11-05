@@ -45,9 +45,11 @@ public class Star : MonoBehaviour
     }
     private void CheckGameOver()
     {
-        if (GameData.instance.Lives <= 0)
+        if (GameData.instance.Lives == 0)
         {
+            AudioManager.instance.PlaySound("GameOver");
             GameObject.Find("GameFunction").GetComponent<GameFunction>().ClientWhenGameOver();
+            
             
         }
     }

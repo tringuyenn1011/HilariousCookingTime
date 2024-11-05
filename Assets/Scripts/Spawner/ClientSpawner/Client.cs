@@ -115,13 +115,16 @@ public class Client : MonoBehaviour
             {
                 Debug.Log("giaothanhcong");
                 GameData.instance.AddPoints(200);
+                FindObjectOfType<GameFunction>().ShowPointPopup(this.GetComponent<RectTransform>().anchoredPosition, 200, this.transform);
                 GameData.instance.AddMoney(50);
+                FindObjectOfType<GameFunction>().ShowMoneyPopup(this.GetComponent<RectTransform>().anchoredPosition, 50, this.transform);
                 foodOrders.Remove(itemToRemove);
             }
             else
             {
                 //Vứt cái bánh nơi mặt
                 GameData.instance.AddPoints(-100);
+                FindObjectOfType<GameFunction>().ShowPointPopup(this.GetComponent<RectTransform>().anchoredPosition, -100, this.transform);
 
                 if(GameObject.Find("GameManager").GetComponent<GameManager>().IsEventRandom(50f))
                 {

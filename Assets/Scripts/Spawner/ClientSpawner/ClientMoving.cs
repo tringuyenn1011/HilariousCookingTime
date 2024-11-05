@@ -79,12 +79,19 @@ public class ClientMoving : MonoBehaviour
                 if(client.isPleasuring)
                 {
                     GameData.instance.AddPoints(300);
-                    GameData.instance.AddMoney(Random.Range(5,16));
+                    FindObjectOfType<GameFunction>().ShowPointPopup(this.GetComponent<RectTransform>().anchoredPosition, 300, this.transform);
+                    int money = Random.Range(5,16);
+                    GameData.instance.AddMoney(money);
+                    FindObjectOfType<GameFunction>().ShowMoneyPopup(this.GetComponent<RectTransform>().anchoredPosition, money, this.transform);
                 }
                     
                 else if(client.waitingTime < 0)
                 {
-                    GameData.instance.AddPoints(-500);
+                    if(GameObject.Find("GameFunction").GetComponent<GameFunction>().isLose == false)
+                    {
+                        GameData.instance.AddPoints(-500);
+                        FindObjectOfType<GameFunction>().ShowPointPopup(this.GetComponent<RectTransform>().anchoredPosition, -500, this.transform);
+                    }
                     
                     GameData.instance.LoseLife();
                     AudioManager.instance.PlaySound("AngryClient");

@@ -91,7 +91,15 @@ public class ClientOrdering : MonoBehaviour
         Vector3 distanceBetweenFoods = new Vector3(0, 0, 0);
         foreach (var item in client.foodOrders)
         {
-            GameObject clone = Instantiate(Resources.Load<GameObject>("Prefabs/EmptyTo"), client.foods.transform);
+            GameObject clone;
+            if(item.itemName.StartsWith("To"))
+            {
+                clone = Instantiate(Resources.Load<GameObject>("Prefabs/EmptyTo"), client.foods.transform);
+            }   
+            else
+            {
+                clone = Instantiate(Resources.Load<GameObject>("Prefabs/EmptyDia"), client.foods.transform);
+            }
             clone.GetComponent<BoxCollider2D>().enabled = false;
             clone.transform.localPosition += distanceBetweenFoods;
             distanceBetweenFoods += new Vector3(0, 120, 0);
