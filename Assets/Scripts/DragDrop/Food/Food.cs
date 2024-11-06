@@ -167,6 +167,10 @@ public class Food : DraggableItem, IDropHandler
 
     private void AddIngredient(DraggableItem draggableItem)
     {
+            if(draggableItem.GetSlotType() == SlotType.Water)
+            {
+                AudioManager.instance.PlaySound("WaterPour");
+            }
             ItemData draggedItem = draggableItem.itemData;
 
             // Di chuyển đối tượng clone vào vị trí của slot
@@ -260,6 +264,7 @@ public class Food : DraggableItem, IDropHandler
 
     private void DoCheckAndAddIngredient(DraggableItem draggableItem, bool isTo)
     {
+        AudioManager.instance.PlaySound("CraftFood");
         if(isTo == true)
         {
             
@@ -288,6 +293,8 @@ public class Food : DraggableItem, IDropHandler
             GameObject explose = Resources.Load<GameObject>("Prefabs/Explosion");
             explose.GetComponent<RectTransform>().anchoredPosition = originPosition;
             GameObject obj = Instantiate(explose, GameObject.Find("DragDrop").transform);
+
+            AudioManager.instance.PlaySound("Explosion");
 
             StartCoroutine(WaitToDestroyAnim(obj));
             Destroy(draggableItem.clone.gameObject);

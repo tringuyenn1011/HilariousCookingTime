@@ -32,7 +32,7 @@ public abstract class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHan
     public virtual void OnBeginDrag(PointerEventData eventData)
     {
         //
-        
+        PlaySound();
         clone = Instantiate(gameObject, canvas.transform);
         rectTransform = clone.GetComponent<RectTransform>();
 
@@ -121,5 +121,27 @@ public abstract class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHan
     public SlotType GetSlotType()
     {
         return itemData.slotType; // Trả về loại slot của món
+    }
+
+    private void PlaySound()
+    {
+        AudioManager audio = AudioManager.instance;
+        switch (itemData.slotType)
+        {
+            case SlotType.Kitchenware: 
+                audio.PlaySound("TakePlate");
+                break;
+            case SlotType.Spice:
+            case SlotType.Kimchi:
+            case SlotType.Meat:
+            case SlotType.Ingredient: 
+            case SlotType.Water:
+                audio.PlaySound("TakeIngredient");
+                break;
+            
+
+            default:
+                break;
+        }
     }
 }

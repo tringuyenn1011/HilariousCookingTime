@@ -108,6 +108,7 @@ public class Bullet : MonoBehaviour
                 //Sinh vet ban ra
                 GameObject prefab = Instantiate(Resources.Load<GameObject>("Prefabs/Dirt"), GameObject.Find("Canvas").transform.GetChild(0));
                 prefab.GetComponent<Image>().sprite = FindObjectOfType<GameFunction>().ChooseRandomDirt();
+                AudioManager.instance.PlaySound("Dirt");
                 StartCoroutine(WaitToDestroy(prefab));
                 
             }
