@@ -95,7 +95,7 @@ public class Bullet : MonoBehaviour
         }else if(gameManager.isRandom && !isSlingshot)
         {
             Debug.LogWarning("Client bắn ra");
-            isSlingshot = true;
+            //isSlingshot = true;
             // Tăng giá trị Lerp theo thời gian dựa trên speed
             lerpTime += 1f * Time.deltaTime ;
             lerpTime = Mathf.Clamp01(lerpTime); // Giữ giá trị trong khoảng từ 0 đến 1
@@ -109,7 +109,7 @@ public class Bullet : MonoBehaviour
                 GameObject prefab = Instantiate(Resources.Load<GameObject>("Prefabs/Dirt"), GameObject.Find("Canvas").transform.GetChild(0));
                 prefab.GetComponent<Image>().sprite = FindObjectOfType<GameFunction>().ChooseRandomDirt();
                 StartCoroutine(WaitToDestroy(prefab));
-                Destroy(this.gameObject);
+                
             }
         }
         
@@ -123,8 +123,11 @@ public class Bullet : MonoBehaviour
 
     private IEnumerator WaitToDestroy(GameObject gameObject)
     {
+        isSlingshot = true;
         yield return new WaitForSeconds(1f);
-        Destroy(gameObject.gameObject);
+        
+        Destroy(gameObject);
+        Destroy(this.gameObject);
         
     }
     public void SetDirection(Vector3 dir, Vector3 initialVelocity)

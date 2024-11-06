@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using Microsoft.Unity.VisualStudio.Editor;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -279,8 +281,26 @@ public class Food : DraggableItem, IDropHandler
         }
         else
         {
+            GameObject prefab = Resources.Load<GameObject>("Prefabs/FoodSlot");
+            prefab.GetComponent<Food>().originPosition = originPosition;
+            Instantiate(prefab, GameObject.Find("Slot").transform);
+
+            GameObject explose = Resources.Load<GameObject>("Prefabs/Explosion");
+            explose.GetComponent<RectTransform>().anchoredPosition = originPosition;
+            GameObject obj = Instantiate(explose, GameObject.Find("DragDrop").transform);
+
+            StartCoroutine(WaitToDestroyAnim(obj));
             Destroy(draggableItem.clone.gameObject);
         }
+    }
+
+    private IEnumerator WaitToDestroyAnim(GameObject gameObject)
+    {
+        
+        yield return new WaitForSeconds(1f);
+        Destroy(gameObject);
+        Destroy(this.gameObject);
+            
     }
     
 
