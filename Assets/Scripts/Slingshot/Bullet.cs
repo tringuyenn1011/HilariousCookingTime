@@ -20,6 +20,7 @@ public class Bullet : MonoBehaviour
     private bool isMovingLeft = false;
     private float targetX = 0f;
     private GameManager gameManager;
+    private GameFunction gameFunction;
     public bool isSlingshot = false;
     private RectTransform rectTransform;
     private Vector2 initialScale;
@@ -43,6 +44,7 @@ public class Bullet : MonoBehaviour
         //this.GetComponent<Bullet>().enabled = true;    
         
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        gameFunction = GameObject.Find("GameFunction").GetComponent<GameFunction>();
         rectTransform  = GetComponent<RectTransform>();
     }
     
@@ -78,7 +80,7 @@ public class Bullet : MonoBehaviour
             velocity.y += gravity * Time.deltaTime; // Cộng thêm gia tốc trọng lực
             transform.localPosition += velocity * Time.deltaTime; // Di chuyển viên đạn theo vị trí cục bộ trong Canvas
             
-            if(transform.localPosition.y > 600 && !isMovingLeft && gameManager.isWind)
+            if(transform.localPosition.y > 600 && !isMovingLeft && gameFunction.isWind)
             {
                 isMovingLeft = true;
             }

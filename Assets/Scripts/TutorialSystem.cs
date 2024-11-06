@@ -2,66 +2,129 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TutorialSystem : MonoBehaviour
 {
-    public List<GameObject> tutorialSteps; // Danh sách các đối tượng cần highlight theo thứ tự
-    public GameObject arrowIcon;           // Biểu tượng chỉ dẫn (mũi tên)
+    public GameObject tutorialDetail;
 
-    private int currentStep = 0;           // Bước hướng dẫn hiện tại
+    private List<GameObject> guides = new List<GameObject>();
 
-    private void Start()
+    public Button leftButton; 
+    public Button rightButton; 
+    public GameObject closeButton;
+    public Button openButton;
+    private RectTransform rectTransform;
+
+    private int currentIndex = 0;
+
+    private bool isDone = false;
+    private Vector3 startPosition;
+    private Vector3 initialScale;
+    private Vector3 targetScale;
+    private float lerpTime;
+
+    public GameObject recipe;
+    public Button recipeButton;
+
+    void Awake() 
     {
-        arrowIcon.SetActive(false);       // Ẩn biểu tượng khi bắt đầu
-        ShowStep(currentStep);            // Hiển thị bước đầu tiên
+        rectTransform = tutorialDetail.transform.parent.GetComponent<RectTransform>();
     }
 
-    // Hàm quản lý các bước hướng dẫn
-    private void ShowStep(int step)
-    {
-        ClearHighlights();  // Tắt mọi biểu tượng chỉ dẫn trước khi chuyển sang bước mới
+    void Start()
+    {   
+        recipe.SetActive(false);
+        tutorialDetail.transform.parent.gameObject.SetActive(true);
+        startPosition = rectTransform.anchoredPosition3D;
+        targetScale = rectTransform.localScale *0.1f;
+        initialScale = rectTransform.localScale;
 
-        if (step < tutorialSteps.Count)
+        foreach(Transform child in tutorialDetail.transform)
         {
-            ShowArrow(tutorialSteps[step]); // Hiển thị mũi tên cho đối tượng trong bước hiện tại
+            guides.Add(child.gameObject);
+            child.gameObject.SetActive(false);
         }
-        else
+        guides[currentIndex].SetActive(true);
+        leftButton.gameObject.SetActive(false);
+        rightButton.gameObject.SetActive(true);
+        Time.timeScale = 0;
+        lerpTime = 0f;
+    }
+
+    void Update()
+    {
+        
+        if(isDone)
         {
-            EndTutorial();  // Kết thúc hướng dẫn nếu hết bước
+            lerpTime += 1f * Time.unscaledDeltaTime; // Dùng unscaledDeltaTime để tính toán thời gian không bị ảnh hưởng bởi Time.timeScale
+            lerpTime = Mathf.Clamp01(lerpTime);
+            rectTransform.anchoredPosition3D = Vector3.Lerp(startPosition, closeButton.GetComponent<RectTransform>().anchoredPosition3D, lerpTime);
+            rectTransform.localScale = Vector3.Lerp(initialScale, targetScale, lerpTime);
+            if(lerpTime == 1)
+            {
+                rectTransform.localScale = initialScale;
+                tutorialDetail.transform.parent.gameObject.SetActive(false); 
+
+            }
         }
     }
 
-    // Phương thức chuyển sang bước tiếp theo khi hoàn thành hành động
-    public void NextStep()
+    public void NextDetail()
     {
-        currentStep++;
-        ShowStep(currentStep);
+        currentIndex++;
+        guides[currentIndex].SetActive(true);
+        guides[currentIndex-1].SetActive(false);
+        leftButton.gameObject.SetActive(true);
+
+        if(currentIndex == guides.Count-1)
+        {
+            leftButton.gameObject.SetActive(true);
+            rightButton.gameObject.SetActive(false);
+        }
     }
 
-    // Phương thức hiển thị biểu tượng mũi tên ở bên cạnh đối tượng cần highlight
-    private void ShowArrow(GameObject target)
+    public void ForwardDetail()
     {
-        arrowIcon.SetActive(true);
-        // Đặt biểu tượng mũi tên ở ngay trên đối tượng cần làm nổi bật
-        arrowIcon.transform.position = target.transform.position + new Vector3(0, 1, 0); // Điều chỉnh vị trí nếu cần
+        currentIndex--;
+        guides[currentIndex].SetActive(true);
+        guides[currentIndex+1].SetActive(false);
+        rightButton.gameObject.SetActive(true);
+        if(currentIndex == 0)
+        {
+            leftButton.gameObject.SetActive(false);
+            rightButton.gameObject.SetActive(true);
+        }
     }
 
-    // Phương thức ẩn biểu tượng chỉ dẫn
-    private void HideArrow()
+    public void CloseTutorial()
     {
-        arrowIcon.SetActive(false);
+        openButton.interactable = true;
+        isDone = true;
+        Time.timeScale = 1f;
     }
 
-    // Phương thức xóa tất cả các highlight
-    private void ClearHighlights()
+    public void OpenTutorial()
     {
-        HideArrow();
+        openButton.interactable = false;
+        rectTransform.anchoredPosition = Vector2.one;
+        isDone = false;
+        lerpTime = 0f;
+        Time.timeScale = 0;
+        tutorialDetail.transform.parent.gameObject.SetActive(true); 
     }
 
-    // Kết thúc hướng dẫn
-    private void EndTutorial()
+    public void OpenRecipe()
     {
-        ClearHighlights();
-        Debug.Log("Tutorial Completed");
+        Time.timeScale = 0;
+        recipeButton.interactable = false;
+        recipe.SetActive(true);
     }
+    public void CloseRecipe()
+    {
+        Time.timeScale = 1;
+        recipeButton.interactable = true;
+        recipe.SetActive(false);
+    }
+
 }

@@ -10,7 +10,12 @@ public class GameFunction : MonoBehaviour
     public GameObject loseBG;
     public bool isLose = false;
 
+    public ParticleSystem wind;
+
     public List<Sprite> dirts;
+
+    public bool isWind = false;
+    private float lastThreshold = 0f;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,7 +25,20 @@ public class GameFunction : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(GameData.instance.Timer >= lastThreshold + 100f && !isWind)
+        {
+            Debug.LogWarning("Windddd!!!!!");
+            isWind = true;
+            lastThreshold += 100f;
+            wind.Play();
+        }
+
+        if(isWind && GameData.instance.Timer >= lastThreshold + 30f)
+        {
+            Debug.LogWarning("EndWindddd!!!!!");
+            isWind = false;
+            wind.Stop();
+        }
     }
 
     public Sprite ChooseRandomDirt()

@@ -10,7 +10,7 @@ public class GameData : MonoBehaviour
     private int point = 0;
     public int lives = 5;
 
-    private float timer = 0f;
+    public float timer = 0f;
 
     private string playerName;
     private int score;
