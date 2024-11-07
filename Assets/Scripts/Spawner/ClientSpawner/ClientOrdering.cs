@@ -20,17 +20,13 @@ public class ClientOrdering : MonoBehaviour
         int recipeCount = ChangeDifficultFood();
         
         
-        // Tạo một danh sách các món ăn còn lại
         List<Recipe> availableRecipes = new List<Recipe>(GameData.instance.Menu.recipesInMenu);
         
-        // Đảm bảo danh sách có đủ món để chọn
         for (int i = 0; i < foodCount && availableRecipes.Count > 0; i++)
         {
-            // Chọn ngẫu nhiên một món ăn
             Recipe selectedRecipe = availableRecipes[Random.Range(0, recipeCount)];
 
             orderedFoods.Add(selectedRecipe.foodSO);
-            // Loại bỏ món ăn đã chọn để không bị trùng
             availableRecipes.Remove(selectedRecipe);
         }
 
@@ -40,7 +36,6 @@ public class ClientOrdering : MonoBehaviour
     private int ChangeRandomFood()
     {
         int count = 2;
-        // Chọn số lượng món ăn ngẫu nhiên từ 1 đến 3
         if(GameData.instance.Timer > 120)
         {
             count = Random.Range(1, 3);
@@ -59,11 +54,10 @@ public class ClientOrdering : MonoBehaviour
     private int ChangeDifficultFood()
     {
         int count = 4;
-        // Chọn số lượng món ăn ngẫu nhiên từ 1 đến 3
-        if(GameData.instance.Timer > 180)
+        if(GameData.instance.Timer > 120)
         {
             count = 8;
-        }else if(GameData.instance.Timer > 360)
+        }else if(GameData.instance.Timer > 300)
         {
             count = GameData.instance.Menu.recipesInMenu.Count;
         }else
@@ -101,7 +95,7 @@ public class ClientOrdering : MonoBehaviour
             }
             clone.GetComponent<BoxCollider2D>().enabled = false;
             clone.transform.localPosition += distanceBetweenFoods;
-            distanceBetweenFoods += new Vector3(0, 120, 0);
+            distanceBetweenFoods += new Vector3(0, 200, 0);
             clone.name = item.name;
             clone.GetComponent<Image>().sprite = item.icon;
         }      

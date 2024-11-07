@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public abstract class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    // Tham chiếu đến Scriptable Object chứa dữ liệu
     public ItemData itemData;
     [HideInInspector]
     public RectTransform rectTransform;
@@ -44,6 +43,7 @@ public abstract class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHan
         
         clone.GetComponent<Image>().sprite = itemData.icon;
         clone.GetComponent<CanvasGroup>().blocksRaycasts = false;
+
 
         
     }
@@ -85,42 +85,35 @@ public abstract class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHan
         //     }
                 
             
-        //      // Khôi phục vị trí
         // }
     }
 
     private bool IsDroppedOnValidSlot()
     {
-        // Sử dụng raycast để kiểm tra đối tượng UI mà con trỏ chuột đang nằm trên
         PointerEventData pointerEventData = new PointerEventData(EventSystem.current)
         {
-            position = Input.mousePosition // Lấy vị trí hiện tại của con trỏ chuột
+            position = Input.mousePosition
         };
 
-        // Tạo danh sách chứa các đối tượng mà raycast chạm vào
         List<RaycastResult> raycastResults = new List<RaycastResult>();
 
-        // Thực hiện raycast từ vị trí chuột
         EventSystem.current.RaycastAll(pointerEventData, raycastResults);
 
-        // Kiểm tra xem có đối tượng nào là Slot không
         foreach (RaycastResult result in raycastResults)
         {
             Food food = result.gameObject.GetComponent<Food>();
             if (food != null)
             {
-                // Nếu đúng là Slot, trả về true
                 return true;
             }
         }
 
-        // Nếu không tìm thấy slot, trả về false
         return false;
     }
 
     public SlotType GetSlotType()
     {
-        return itemData.slotType; // Trả về loại slot của món
+        return itemData.slotType;
     }
 
     private void PlaySound()

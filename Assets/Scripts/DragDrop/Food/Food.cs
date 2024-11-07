@@ -63,37 +63,7 @@ public class Food : DraggableItem, IDropHandler
             {
                 
             }
-            
-            
-            // if(itemsInSlot.Count == 0 && draggableItem.GetSlotType() == SlotType.Kitchenware)
-            // {
-            //         AddIngredient(draggableItem);
-            // }else if (draggableItem != null && CheckCanDropInto(draggableItem) && !IsHaveBefore(draggableItem)
-            //             && itemsInSlot.Count != 0)
-            // {
-            //     AddIngredient(draggableItem);
-            //     if(itemsInSlot.Count >= 2)
-            //         CreateFoodItem();
-            // }else
-            // {
-            //     Destroy(draggableItem.clone.gameObject);
-            // }
         }   
-
-
-            // // Kiểm tra xem đối tượng có triển khai IDraggableItem không
-            // var draggableItem = eventData.pointerDrag.GetComponent<DraggableItem>();
-
-            // if (draggableItem != null && draggableItem.GetSlotType() == slotType)
-            // {
-            //     // Di chuyển đối tượng vào vị trí của slot
-            //     RectTransform itemTransform = eventData.pointerDrag.GetComponent<RectTransform>();
-            //     itemTransform.anchoredPosition = GetComponent<RectTransform>().anchoredPosition;
-
-            //     // Cập nhật vị trí ban đầu cho đối tượng
-            //     eventData.pointerDrag.GetComponent<DraggableItem>().originalPosition = 
-            //         GetComponent<RectTransform>().anchoredPosition;
-            // }
     }
     
     private bool IsHaveBefore(DraggableItem draggableItem)
@@ -141,7 +111,6 @@ public class Food : DraggableItem, IDropHandler
     private void CreateNewFood(Recipe recipe)
     {
         itemData = recipe.foodSO;
-        //Tạo thành đồ ăn rồi sinh ra Object Clone chứa đồ ăn
         if(isTo)
             clone = Instantiate(Resources.Load<GameObject>("Prefabs/EmptyTo"), this.transform);
         else
@@ -172,21 +141,18 @@ public class Food : DraggableItem, IDropHandler
             }
             ItemData draggedItem = draggableItem.itemData;
 
-            // Di chuyển đối tượng clone vào vị trí của slot
             RectTransform itemTransform = draggableItem.clone.GetComponent<RectTransform>();
             itemTransform.anchoredPosition = GetComponent<RectTransform>().anchoredPosition;
             itemTransform.transform.SetParent(this.gameObject.transform);
 
             itemsInSlot.Add(draggedItem);
 
-            // Kiểm tra nếu nguyên liệu đã tồn tại trong slot, tắt raycast để không cản trở thao tác kéo thả tiếp theo
             draggableItem.clone.GetComponent<CanvasGroup>().blocksRaycasts = false;
             Debug.Log("Đã thêm nguyên liệu vào slot."); 
     }
 
     private bool IsSpiceFirstIngredient(DraggableItem draggableItem)
     {
-        // Kiểm tra xem có nguyên liệu trong slot trước khi cho phép thêm gia vị
         if (IsSpice(draggableItem) && itemsInSlot.Count == 1)
         {
             Debug.Log("Không thể thêm gia vị khi không có nguyên liệu nào!");
@@ -218,7 +184,7 @@ public class Food : DraggableItem, IDropHandler
 
     private bool IsSpice(DraggableItem item)
     {
-        return item.GetSlotType() == SlotType.Spice; // Hoặc sử dụng SlotType.Spice nếu đã thiết lập
+        return item.GetSlotType() == SlotType.Spice;
     }
 
     private bool CheckCanDropInto(DraggableItem item)
@@ -263,7 +229,14 @@ public class Food : DraggableItem, IDropHandler
 
     private void DoCheckAndAddIngredient(DraggableItem draggableItem, bool isTo)
     {
-        AudioManager.instance.PlaySound("CraftFood");
+        if(draggableItem.GetSlotType() == SlotType.Water)
+        {
+            AudioManager.instance.PlaySound("WaterPour");
+        }else
+        {
+            AudioManager.instance.PlaySound("CraftFood");
+        }
+        
         if(isTo == true)
         {
             

@@ -57,17 +57,12 @@ public class Slingshot : MonoBehaviour
 
     }
 
-    /// <summary>
-    /// Chuyển giá trị itemData từ dĩa lên ná
-    /// </summary>
+
     void SetItemData()
     {
 
     }
 
-    /// <summary>
-    /// Tạo một đối tượng gameObject lấy data từ item data
-    /// </summary>
     public void SetFood()
     {
         food = this.transform.Find("object").gameObject;
@@ -88,37 +83,7 @@ public class Slingshot : MonoBehaviour
 
     void Update()
     {
-        // if(itemData != null && itemData.slotType == SlotType.Food)
-        // {
-            
-        //     if (isMouseDown)
-        //     {
-                
-        //         // Lấy position của con trỏ và chuyển nó thành position trên canvas
-        //         Vector3 mousePosition = Input.mousePosition;
-        //         mousePosition.z = 100;
-        //         currentPosition = Camera.main.ScreenToWorldPoint(mousePosition);
-
-        //         // Vector2 canvasPosition;
-        //         // RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRectTransform, mousePosition, null, out canvasPosition);
-        //         // currentPosition = canvasPosition;
-
-        //         // // Tính giá trị vector từ vị trí center đến vị trí con trỏ trên canvas
-        //         currentPosition = center.position + Vector3.ClampMagnitude(currentPosition - center.position, maxLength);
-        //         currentPosition = ClampBoundary(currentPosition);
-        //         Debug.LogWarning(currentPosition);
-        //         SetStrips(currentPosition);
-        //         // if (dishCollider)
-        //         // {
-        //         //     dishCollider.enabled = true;
-        //         // }
-        //     }
-            
-                
-        // }else
-        // {
-        //     ResetStrips();
-        // }
+       
     }
 
     public void OnMouseDown() 
@@ -133,16 +98,10 @@ public class Slingshot : MonoBehaviour
             if (isMouseDown)
             {
                 
-                // Lấy position của con trỏ và chuyển nó thành position trên canvas
                 Vector3 mousePosition = Input.mousePosition;
                 mousePosition.z = 100;
                 currentPosition = Camera.main.ScreenToWorldPoint(mousePosition);
 
-                // Vector2 canvasPosition;
-                // RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRectTransform, mousePosition, null, out canvasPosition);
-                // currentPosition = canvasPosition;
-
-                // // Tính giá trị vector từ vị trí center đến vị trí con trỏ trên canvas
                 currentPosition = center.position + Vector3.ClampMagnitude(currentPosition - center.position, maxLength);
                 currentPosition = ClampBoundary(currentPosition);
                 
@@ -162,13 +121,10 @@ public class Slingshot : MonoBehaviour
     {
         if (isDragging)
         {
-            // Lấy vị trí hiện tại của chuột trong không gian thế giới
             Vector3 currentMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-            // Tính khoảng cách di chuyển theo trục X
             float deltaX = currentMousePosition.x - startMousePosition.x;
 
-            // Di chuyển object theo trục X
             transform.position = new Vector3(startObjectPosition.x + deltaX, startObjectPosition.y, startObjectPosition.z);
             currentPosition = new Vector3(transform.position.x, -3.5f, 110);
             SetStrips(currentPosition);
@@ -184,7 +140,7 @@ public class Slingshot : MonoBehaviour
             AudioManager.instance.PlaySound("SlingshotDrop");
             direction = center.transform.position - currentPosition;
             direction.z = 1000f;
-            direction.Normalize(); // Chuẩn hóa hướng bắn
+            direction.Normalize();
             
 
             
@@ -197,7 +153,6 @@ public class Slingshot : MonoBehaviour
             foodPrefab.GetComponent<Image>().SetNativeSize();
             foodPrefab.GetComponent<Bullet>().itemData = itemData;
 
-            // Gán hướng bắn cho viên đạn
             foodPrefab.GetComponent<Bullet>().SetDirection(direction, CalculateInitialVelocity(direction));
             //GameObject clone = Instantiate(foodPrefab, this.transform);
             //Destroy(foodPrefab);
@@ -207,15 +162,13 @@ public class Slingshot : MonoBehaviour
         }  
     }
 
-    // Hàm tính toán vận tốc ban đầu để tạo quỹ đạo
     private Vector3 CalculateInitialVelocity(Vector3 direction)
     {
-        float speed = 700f; // Tốc độ ban đầu (có thể thay đổi)
-        float arcHeight = 1700f; // Độ cao của quỹ đạo (có thể thay đổi)
+        float speed = 700f; 
+        float arcHeight = 1700f; 
         
-        // Tính toán vận tốc ban đầu theo hướng đã chuẩn hóa
         Vector3 initialVelocity = direction * speed;
-        initialVelocity.y += arcHeight; // Thêm một độ cao cho quỹ đạo
+        initialVelocity.y += arcHeight; 
         Debug.Log(initialVelocity);
         return initialVelocity;
     }
@@ -228,28 +181,7 @@ public class Slingshot : MonoBehaviour
     }
 
     
-    /// <summary>
-    /// Cho projectile 1 lực force với hướng ngược lại của vector từ center đến con trỏ
-    /// </summary>
-    // void Shoot()
-    // {
-    //     GameObject clone = Instantiate(foodPrefab, this.transform);
-    //     //Destroy(foodPrefab);
-        
-    //     Vector3 foodForce = currentPosition - center.position;
-    //     Debug.Log("oke");
-    //     foodForce.z = 0;
-    //     Rigidbody2D rb = clone.GetComponent<Rigidbody2D>();
-    //     rb.AddForce(foodForce.normalized * force * -1, ForceMode2D.Impulse);
-
-    //     // dish.isKinematic = false;
-        
-    //     // dish = null;
-    //     //foodCollider = null;
-    //     // //Loại bỏ dòng này nếu như đã làm chức năng setItemData
-    //     // Invoke("CreateDish", 2);
-    //     foodPrefab.GetComponent<Bullet>().Shoot(foodForce);
-    // }
+    
 
     void ResetStrips()
     {
@@ -290,14 +222,9 @@ public class Slingshot : MonoBehaviour
         slingSlot.GetComponent<SlingSlot>().firstDrag.SetActive(true);
     }
 
-    /// <summary>
-    /// Tăng độ căng của ná, giá trị càng cao ná càng yếu
-    /// </summary>
-    /// <param name="vector"></param>
-    /// <returns></returns>
     Vector3 ClampBoundary(Vector3 vector)
     {
-        vector.y = Mathf.Clamp(vector.y, bottomBoundary, topBoundary);  // Giới hạn bình thường
+        vector.y = Mathf.Clamp(vector.y, bottomBoundary, topBoundary);
         return vector;
     }
 

@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Oscillation : MonoBehaviour
 {
-    public float amplitude = 1f; // Biên độ dao động
-    public float frequency = 1f; // Tần số dao động
-    public Vector3 direction = Vector3.up; // Hướng dao động
+    public float amplitude = 1f; 
+    public float frequency = 1f; 
+    public Vector3 direction = Vector3.up;
 
     private Vector3 startPosition;
 

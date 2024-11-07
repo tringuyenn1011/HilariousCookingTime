@@ -24,7 +24,6 @@ public class Client : MonoBehaviour
 
     public List<ItemData> foodOrders;
 
-    // Kiểm tra xem khách hàng đã chọn chỗ ngồi chưa
     public bool isChoosingSeat = false;
 
     public bool isPleasuring = false;
@@ -60,6 +59,7 @@ public class Client : MonoBehaviour
         clientMoving.Move(this);
         if (isOrdering && !isChoosingFoods)
         {
+            this.gameObject.GetComponent<BoxCollider>().enabled = true;
             Debug.Log("Khách hàng Order");
             AudioManager.instance.PlaySound("ClientOrder");
             thinking.SetActive(true);
@@ -82,6 +82,7 @@ public class Client : MonoBehaviour
             //Khách hàng rời đi
             isPleasuring = true;
             thinking.SetActive(false);
+            this.gameObject.GetComponent<BoxCollider>().enabled = false;
         }
     }
 
@@ -89,19 +90,15 @@ public class Client : MonoBehaviour
     {
         float time = 0;
         if(foodOrders.Count == 2)
-            time = Random.Range(40f, 45f);
+            time = Random.Range(40f, 50f);
         else if(foodOrders.Count == 3)
-            time = Random.Range(45f, 50f);
+            time = Random.Range(50f, 55f);
         else
             time = Random.Range(39f, 40f);
         
         return time;
     }
 
-    //Nếu tag là food
-    //  tên món ăn trùng với foodOrder
-    //      thì foodOrders remove món ăn đó (foodOrders = 0 thì khách hàng thỏa mãn)
-    //      nếu không phải thì khách hàng tức giận
     private void OnTriggerEnter(Collider collision)
     {
         Bullet bullet = collision.GetComponent<Bullet>();
@@ -134,9 +131,6 @@ public class Client : MonoBehaviour
 
             clientOrdering.DisplayOrder(this);
 
-            // GameObject prefab = Resources.Load<GameObject>("Prefabs/FoodSlot");
-            // Instantiate(prefab, GameObject.Find("Slot").transform);
-            // //prefab.transform.position = collision.GetComponent<Food>().originalPosition;
         }
 
         

@@ -27,7 +27,7 @@ public class AudioManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        musicSource.volume = 0.3f;
+        musicSource.volume = 0.4f;
         sfxSource.volume = 1f;
     }
 
@@ -39,12 +39,12 @@ public class AudioManager : MonoBehaviour
 
     private void LoadAudioClips()
     {
-        // Load nội dung của file AudioPaths.txt từ Resources
+        
         TextAsset textFile = Resources.Load<TextAsset>("AudioPaths");
         
         if (textFile != null)
         {
-            // Đọc từng dòng trong nội dung của file
+            
             string[] lines = textFile.text.Split(new[] { '\n', '\r' }, System.StringSplitOptions.RemoveEmptyEntries);
             
             foreach (string line in lines)
@@ -52,15 +52,15 @@ public class AudioManager : MonoBehaviour
                 string[] splitLine = line.Split('=');
                 if (splitLine.Length == 2)
                 {
-                    string key = splitLine[0]; // Tên của âm thanh
-                    string resourcePath = splitLine[1]; // Đường dẫn tới file âm thanh trong Resources
+                    string key = splitLine[0]; 
+                    string resourcePath = splitLine[1]; 
                     
-                    // Load file âm thanh từ đường dẫn
+                    
                     AudioClip clip = Resources.Load<AudioClip>(resourcePath);
                     
                     if (clip != null)
                     {
-                        // Lưu âm thanh vào Dictionary với key là tên
+                        
                         audioClips[key] = clip;
                     }
                     else

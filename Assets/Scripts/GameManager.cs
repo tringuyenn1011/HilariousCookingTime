@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        AudioManager.instance.PlayMusic("GameBackgroundMusic");
+        
     }
 
     // Update is called once per frame
@@ -30,7 +30,6 @@ public class GameManager : MonoBehaviour
     public bool IsEventRandom(float chance)
     {
         isRandom = true;
-        // chance là phần trăm (ví dụ: 80 nghĩa là 80%)
         return Random.Range(0f, 100f) < chance;
     }
 }

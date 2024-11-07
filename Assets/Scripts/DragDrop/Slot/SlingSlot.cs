@@ -43,11 +43,5 @@ public class SlingSlot : MonoBehaviour, IDropHandler
             
             Debug.Log("Do An chua hoan thanh");
         }
-        // else if(eventData.pointerDrag.gameObject.GetComponent<Food>().slotType == SlotType.Drink)
-        // {
-        //     GameObject prefab = Resources.Load<GameObject>("Prefabs/DrinkSlot");
-        //     Instantiate(prefab, GameObject.Find("Slot").transform);
-        //     Destroy(eventData.pointerDrag.gameObject);
-        // }
     }
 }

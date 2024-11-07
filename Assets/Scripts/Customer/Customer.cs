@@ -53,7 +53,7 @@ public class Customer : MonoBehaviour
         transform.position = Vector3.MoveTowards(this.transform.position, destinationPoint.position, speed * Time.deltaTime);
     }
 
-    // Khách hàng sẽ ngồi nếu ghế trống và nếu không có ghế trống 
+    
     private Transform ChooseSlot()
     {
         foreach (ClientSlot s in clientSlots)

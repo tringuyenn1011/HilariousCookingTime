@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
 public class GameFunction : MonoBehaviour
@@ -16,10 +18,14 @@ public class GameFunction : MonoBehaviour
 
     public bool isWind = false;
     private float lastThreshold = 0f;
+
+    public GameObject settingContainer;
+    public Button settingBtn;
+    public TMP_Text scoreText;
     // Start is called before the first frame update
     void Start()
     {
-        
+        AudioManager.instance.PlayMusic("GameBackgroundMusic");
     }
 
     // Update is called once per frame
@@ -53,10 +59,8 @@ public class GameFunction : MonoBehaviour
         GameObject prefab = Resources.Load<GameObject>("Prefabs/PopUpPoint");
         TextMeshProUGUI scoreText = prefab.GetComponent<TextMeshProUGUI>();
         scoreText.text = score.ToString();
-        // Tạo instance của popup điểm từ prefab và đặt trong Canvas
         GameObject instantiate = Instantiate(prefab, transform);
-        // Hủy popup sau một thời gian để tránh tràn bộ nhớ
-        Destroy(instantiate, 2f); // Popup sẽ tự động bị hủy sau 1 giây
+        Destroy(instantiate, 2f); 
     }
 
     public void ShowMoneyPopup(Vector2 position, int score, Transform transform)
@@ -64,10 +68,10 @@ public class GameFunction : MonoBehaviour
         GameObject prefab = Resources.Load<GameObject>("Prefabs/PopUpMoney");
         TextMeshProUGUI scoreText = prefab.GetComponent<TextMeshProUGUI>();
         scoreText.text = "$" + score.ToString();
-        // Tạo instance của popup điểm từ prefab và đặt trong Canvas
+        
+
         GameObject instantiate = Instantiate(prefab, transform);
-        // Hủy popup sau một thời gian để tránh tràn bộ nhớ
-        Destroy(instantiate, 2f); // Popup sẽ tự động bị hủy sau 1 giây
+        Destroy(instantiate, 2f); 
     }
 
     public void ClientWhenGameOver()
@@ -83,7 +87,8 @@ public class GameFunction : MonoBehaviour
             temp.isChoosingFoods = false;
         
         }
-
+        scoreText.text = string.Format("Your Point: {0}",GameData.instance.Point);
+        AudioManager.instance.musicSource.Stop();
         StartCoroutine(WaitForAnimation(2));
     }
 
@@ -117,16 +122,37 @@ public class GameFunction : MonoBehaviour
         GameData.instance.Point = 0;
     }
 
-    // Hàm OnGameEnd có tham số (không trực tiếp dùng cho Button)
     public void OnGameEnd(string playerName, int score) {
         SaveScore(playerName, score);
-        UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu"); // Thay "MainMenu" bằng tên scene của bạn
+        SceneManager.LoadScene("MainMenu");
     }
 
-    // Hàm không có tham số để gọi từ Button
     public void OnGameEndButton() {
-        OnGameEnd(GameData.instance.PlayerName, GameData.instance.Point); // Gọi hàm OnGameEnd với dữ liệu đã lưu
+        OnGameEnd(GameData.instance.PlayerName, GameData.instance.Point);
     }
 
+    public void OpenSetting()
+    {
+        AudioManager.instance.PlaySound("WaterPour");
+        settingContainer.SetActive(true);
+        settingBtn.interactable = false;
+
+        Time.timeScale = 0;
+    }
+    public void CloseSetting()
+    {
+        AudioManager.instance.PlaySound("WaterPour");
+        settingContainer.SetActive(false);
+        settingBtn.interactable = true;
+
+        Time.timeScale = 1;
+    }
+
+    public void BackToMenu()
+    {
+        AudioManager.instance.PlaySound("WaterPour");
+        Time.timeScale = 1;
+        SceneManager.LoadScene("MainMenu");
+    }
 
 }

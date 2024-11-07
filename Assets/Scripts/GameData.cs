@@ -70,7 +70,7 @@ public class GameData : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
-            LoadMenu(); // Tải Menu khi khởi tạo GameData
+            LoadMenu(); 
         }
         else
         {
@@ -82,20 +82,20 @@ public class GameData : MonoBehaviour
 
     void Update()
     {
-        // Tăng thời gian theo thời gian đã trôi qua mỗi frame
+        
         timer += Time.deltaTime;
     }
 
     private void LoadMenu()
     {
-        Menu = Resources.Load<Menu>("Menu"); // Tải Menu từ Resources
+        Menu = Resources.Load<Menu>("Menu"); 
         if (Menu == null)
         {
             Debug.LogError("Không tìm thấy Menu trong Resources!");
         }
     }
 
-    // Các phương thức để thao tác với dữ liệu
+    
     public void AddMoney(int amount)
     {
         currencycpn = GameObject.Find("Currency").GetComponent<Currency>();

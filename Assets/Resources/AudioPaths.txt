@@ -11,3 +11,4 @@ CraftFood=Audio/MakeFood/craft_food
 TakePlate=Audio/MakeFood/take_plate
 TakeIngredient=Audio/MakeFood/take_ingredient
 WaterPour=Audio/MakeFood/water_pour
+ClickButton=Audio/button/slingshot_active_button

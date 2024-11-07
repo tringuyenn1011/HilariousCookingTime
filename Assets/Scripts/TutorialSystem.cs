@@ -57,7 +57,7 @@ public class TutorialSystem : MonoBehaviour
         
         if(isDone)
         {
-            lerpTime += 1f * Time.unscaledDeltaTime; // Dùng unscaledDeltaTime để tính toán thời gian không bị ảnh hưởng bởi Time.timeScale
+            lerpTime += 1f * Time.unscaledDeltaTime; 
             lerpTime = Mathf.Clamp01(lerpTime);
             rectTransform.anchoredPosition3D = Vector3.Lerp(startPosition, closeButton.GetComponent<RectTransform>().anchoredPosition3D, lerpTime);
             rectTransform.localScale = Vector3.Lerp(initialScale, targetScale, lerpTime);
@@ -99,6 +99,7 @@ public class TutorialSystem : MonoBehaviour
 
     public void CloseTutorial()
     {
+        AudioManager.instance.PlaySound("WaterPour");
         openButton.interactable = true;
         isDone = true;
         Time.timeScale = 1f;
@@ -106,6 +107,7 @@ public class TutorialSystem : MonoBehaviour
 
     public void OpenTutorial()
     {
+        AudioManager.instance.PlaySound("WaterPour");
         openButton.interactable = false;
         rectTransform.anchoredPosition = Vector2.one;
         isDone = false;
@@ -116,12 +118,14 @@ public class TutorialSystem : MonoBehaviour
 
     public void OpenRecipe()
     {
+        AudioManager.instance.PlaySound("WaterPour");
         Time.timeScale = 0;
         recipeButton.interactable = false;
         recipe.SetActive(true);
     }
     public void CloseRecipe()
     {
+        AudioManager.instance.PlaySound("WaterPour");
         Time.timeScale = 1;
         recipeButton.interactable = true;
         recipe.SetActive(false);
